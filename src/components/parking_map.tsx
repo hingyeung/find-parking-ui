@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StaticMap } from 'react-map-gl';
 import DeckGL, {ScatterplotLayer} from 'deck.gl';
 import parkingData from '../data/parking_sensor_data.json';
+import Button from './button';
 
 interface IParkingMapState {
   clickedObject: any;
@@ -32,6 +33,11 @@ export default class ParkingMap extends Component {
     points: [],
     style: 'mapbox://styles/mapbox/light-v9'
   };
+
+  constructor(props: {}) {
+    super(props);
+    this.onButtonClick = this.onButtonClick.bind(this);
+  }
 
   componentDidMount() {
     this._processData();
@@ -81,21 +87,28 @@ export default class ParkingMap extends Component {
     });
   }
 
+  onButtonClick() {
+    console.log('current location detected');
+  }
+
   render() {
     return (
       <div>
-        <DeckGL
-          initialViewState={INITIAL_VIEW_STATE}
-          controller
-          layers={this._renderLayers({data: this.state.points})}
-        >
-          <StaticMap
-            mapboxApiAccessToken={MAPBOX_TOKEN}
-            mapStyle={this.state.style}
-            width="100vw" height="100vh"
-          />
-           { this._renderTooltip() }
-        </DeckGL>
+        <div id="parking-map-wrapper">
+          <DeckGL
+            initialViewState={INITIAL_VIEW_STATE}
+            controller
+            layers={this._renderLayers({data: this.state.points})}
+          >
+            <StaticMap
+              mapboxApiAccessToken={MAPBOX_TOKEN}
+              mapStyle={this.state.style}
+              width="100vw" height="100vh"
+            />
+             { this._renderTooltip() }
+          </DeckGL>
+        </div>
+        <Button onClick={this.onButtonClick} />
       </div>
     )
   }

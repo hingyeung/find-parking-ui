@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { StaticMap } from 'react-map-gl';
-import DeckGL, {ScatterplotLayer} from 'deck.gl';
+import DeckGL, {MapView, ScatterplotLayer} from 'deck.gl';
 import parkingData from '../data/parking_sensor_data.json';
 import Button from './button';
+import {Coordinate} from '../types';
 
 interface IParkingMapState {
   clickedObject: any;
-  pointerX: number | undefined;
-  pointerY: number | undefined;
+  pointerX?: number | undefined;
+  pointerY?: number | undefined;
   points: any[];
   style: string;
+  currentLocation?: Coordinate | undefined;
 }
 
 const INITIAL_VIEW_STATE = {
@@ -28,15 +30,13 @@ const MAPBOX_TOKEN = process.env.REACT_APP_MapboxAccessToken;
 export default class ParkingMap extends Component {
   state: IParkingMapState = {
     clickedObject: undefined,
-    pointerX: undefined,
-    pointerY: undefined,
     points: [],
-    style: 'mapbox://styles/mapbox/light-v9'
+    style: 'mapbox://styles/mapbox/light-v9',
   };
 
   constructor(props: {}) {
     super(props);
-    this.onButtonClick = this.onButtonClick.bind(this);
+    this.updateCurrentLocation = this.updateCurrentLocation.bind(this);
   }
 
   componentDidMount() {
@@ -53,11 +53,11 @@ export default class ParkingMap extends Component {
     );
   }
 
-  _renderLayers(props: {data: any[]}) {
+  _renderLayers(props: {data: any[]}, currentLocation: Coordinate | undefined) {
     const {data} = props;
-    return [
+    const layers = [
       new ScatterplotLayer({
-        id: 'scatterplot',
+        id: 'parking-spaces',
         getPosition: (d: any) => d.position,
         getColor: (d: any) => [0, 153, 0],
         getRadius: (d: any) => 10,
@@ -73,6 +73,25 @@ export default class ParkingMap extends Component {
         data
       })
     ];
+
+    if (currentLocation) {
+      layers.push(
+        new ScatterplotLayer({
+          id: 'current-location',
+          getPosition: (d: any) => d.position,
+          getColor: (d: any) => [255, 0, 0],
+          getRadius: (d: any) => 10,
+          opacity: 0.5,
+          pickable: true,
+          radiusMinPixels: 0.25,
+          radiusMaxPixels: 30,
+          data: [{
+            position: [currentLocation.longitude, currentLocation.latitude]
+          }]
+        })
+      )
+    }
+    return layers;
   }
 
   _processData() {
@@ -87,8 +106,11 @@ export default class ParkingMap extends Component {
     });
   }
 
-  onButtonClick() {
+  updateCurrentLocation(currentLocation: Coordinate) {
     console.log('current location detected');
+    this.setState({
+      currentLocation,
+    })
   }
 
   render() {
@@ -98,17 +120,19 @@ export default class ParkingMap extends Component {
           <DeckGL
             initialViewState={INITIAL_VIEW_STATE}
             controller
-            layers={this._renderLayers({data: this.state.points})}
+            layers={this._renderLayers({data: this.state.points}, this.state.currentLocation)}
           >
-            <StaticMap
-              mapboxApiAccessToken={MAPBOX_TOKEN}
-              mapStyle={this.state.style}
-              width="100vw" height="100vh"
-            />
-             { this._renderTooltip() }
+            <MapView id="map" width="75%">
+              <StaticMap
+                mapboxApiAccessToken={MAPBOX_TOKEN}
+                mapStyle={this.state.style}
+                width="100vw" height="100vh"
+              />
+            </MapView>
+               { this._renderTooltip() }
           </DeckGL>
         </div>
-        <Button onClick={this.onButtonClick} />
+        <Button onClick={this.updateCurrentLocation} />
       </div>
     )
   }

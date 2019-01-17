@@ -1,15 +1,16 @@
 import React from 'react';
 import { getCurrentPosition } from '../services/location_service';
+import {Coordinate} from '../types';
 
 interface ButtonProps {
-  onClick(e: React.MouseEvent<HTMLElement>): void;
+  onClick(currentPosition: Coordinate): void;
 }
 
 export default (props: ButtonProps) => {
   async function getCurrentLocation(e: React.MouseEvent<HTMLElement>) {
     const currentPosition = await getCurrentPosition();
     console.log(currentPosition);
-    props.onClick(e);
+    props.onClick(currentPosition);
   }
 
   return (

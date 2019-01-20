@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StaticMap } from 'react-map-gl';
 import DeckGL, {MapView, ScatterplotLayer} from 'deck.gl';
 import parkingData from '../data/parking_sensor_data.json';
-import Button from './button';
+import LocateMeButton from './locate_me_button';
 import {Coordinate} from '../types';
 
 interface IParkingMapState {
@@ -36,7 +36,6 @@ export default class ParkingMap extends Component {
 
   constructor(props: {}) {
     super(props);
-    this.updateCurrentLocation = this.updateCurrentLocation.bind(this);
   }
 
   componentDidMount() {
@@ -106,13 +105,6 @@ export default class ParkingMap extends Component {
     });
   }
 
-  updateCurrentLocation(currentLocation: Coordinate) {
-    console.log('current location detected');
-    this.setState({
-      currentLocation,
-    })
-  }
-
   render() {
     return (
       <div>
@@ -132,7 +124,7 @@ export default class ParkingMap extends Component {
                { this._renderTooltip() }
           </DeckGL>
         </div>
-        <Button onClick={this.updateCurrentLocation} />
+        <LocateMeButton />
       </div>
     )
   }

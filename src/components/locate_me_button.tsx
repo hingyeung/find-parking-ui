@@ -17,6 +17,7 @@ const LocateMeButton: React.FunctionComponent<LocateMeButtonProps> = (props) => 
 };
 
 const mapStateToProps = (state: ApplicationState) => {
+  return {};
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<ApplicationState, void, AnyAction>) => ({

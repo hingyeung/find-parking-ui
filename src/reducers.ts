@@ -1,22 +1,28 @@
 import React from 'react';
 import { getCurrentPosition } from './services/location_service';
 import { UPDATE_CURRENT_LOCATION } from './actions';
+import parkingSensorData from  './data/parking_sensor_data.json'
+import { ApplicationState } from './types';
+import { combineReducers } from 'redux';
 
-const initialState = {};
+const initialState: ApplicationState = {
+  parkingSensorData: processData(),
+  mapStyle: 'mapbox://styles/mapbox/light-v9'
+};
 
-function findParkingApp(state = initialState, action: any) {
-  if (typeof state === 'undefined') {
-    return initialState;
-  }
+function processData() {
+  return parkingSensorData.map((parking) => {
+    return {
+      position: [Number(parking.coordinates.lng), Number(parking.coordinates.lat)],
+      bayId: parking.bay_id
+    }
+  });
+}
 
-  // if action === update_current_location (may need thunk for async operation)
-  // async function getCurrentLocation(e: React.MouseEvent<HTMLElement>) {
-  //   const currentPosition = await getCurrentPosition();
-  //   console.log(currentPosition);
-  // }
+function findParkingApp(state: ApplicationState = initialState, action: any) {
   switch (action.type) {
     case UPDATE_CURRENT_LOCATION:
-      return { state, currentLocation: action.payload };
+      return Object.assign({}, state, {currentLocation: action.payload});
     default:
       return state;
   }

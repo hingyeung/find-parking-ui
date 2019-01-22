@@ -5,4 +5,6 @@ export interface Coordinate {
 
 export interface ApplicationState {
   currentLocation?: Coordinate;
+  parkingSensorData: any[];
+  mapStyle: string;
 }

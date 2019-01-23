@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { StaticMap } from 'react-map-gl';
-import DeckGL, {MapView, ScatterplotLayer} from 'deck.gl';
+import DeckGL, { MapView, ScatterplotLayer } from 'deck.gl';
 import LocateMeButton from './locate_me_button';
-import { ApplicationState, Coordinate } from '../types';
+import { ApplicationState, Coordinate, ParkingSpace } from '../types';
 import { connect } from 'react-redux';
 
 // interface IParkingMapState {
@@ -28,10 +28,11 @@ const INITIAL_VIEW_STATE = {
 const MAPBOX_TOKEN = process.env.REACT_APP_MapboxAccessToken;
 
 interface IParkingMap {
-  points?: any[];
+  points: any[] | [];
   mapStyle?: string;
   currentLocation?: Coordinate
 }
+
 class ParkingMap extends Component<IParkingMap> {
   // state: IParkingMapState = {
   //   clickedObject: undefined,
@@ -57,8 +58,17 @@ class ParkingMap extends Component<IParkingMap> {
   //   );
   // }
 
-  _renderLayers(props: {data: any[] | undefined}, currentLocation: Coordinate | undefined) {
-    const {data} = props;
+  _processData(parkingSpaces: ParkingSpace[]) {
+    return parkingSpaces.map((parkingSpace) => {
+      return {
+        position: [Number(parkingSpace.coordinate.longitude), Number(parkingSpace.coordinate.latitude)],
+        bayId: parkingSpace.id
+      }
+    });
+  }
+
+  _renderLayers(props: {data: any[] | []}, currentLocation: Coordinate | undefined) {
+    const data = this._processData(props.data);
     const layers = [
       new ScatterplotLayer({
         id: 'parking-spaces',
@@ -97,18 +107,6 @@ class ParkingMap extends Component<IParkingMap> {
     }
     return layers;
   }
-
-  // _processData() {
-  //   const points = parkingData.map((parking) => {
-  //     return {
-  //       position: [Number(parking.coordinates.lng), Number(parking.coordinates.lat)],
-  //       bayId: parking.bay_id
-  //     }
-  //   });
-  //   this.setState({
-  //     points
-  //   });
-  // }
 
   render() {
     return (

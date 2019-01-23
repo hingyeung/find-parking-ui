@@ -1,0 +1,9 @@
+# npx stubby -w -d stubby.yaml
+- request:
+    url: ^/findAvailableParkings$
+    method: GET
+  response:
+    - status: 200
+      headers:
+        content-type: application/json
+      file: parking_sensor_data.json

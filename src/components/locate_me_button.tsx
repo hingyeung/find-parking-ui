@@ -1,7 +1,7 @@
 import React from 'react';
 import { ApplicationState } from '../types';
 import { connect } from "react-redux";
-import { fetchCurrentLocationWithThunk } from '../actions';
+import { fetchCurrentLocationAndAvailableParkingsWithThunk } from '../actions';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 
@@ -21,7 +21,8 @@ const mapStateToProps = (state: ApplicationState) => {
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<ApplicationState, void, AnyAction>) => ({
-  fetchCurrentLocation: () => dispatch(fetchCurrentLocationWithThunk())
+  // https://github.com/reduxjs/redux/issues/1676#issuecomment-215413478
+  fetchCurrentLocation: () => dispatch(fetchCurrentLocationAndAvailableParkingsWithThunk())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LocateMeButton);

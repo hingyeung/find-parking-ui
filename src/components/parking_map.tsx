@@ -33,16 +33,74 @@ interface IParkingMap {
   currentLocation?: Coordinate
 }
 
-class ParkingMap extends Component<IParkingMap> {
+const _processData = (parkingSpaces: ParkingSpace[]) => {
+  let idx = 0;
+  return parkingSpaces.map((parkingSpace) => {
+    return {
+      position: [Number(parkingSpace.coordinate.longitude), Number(parkingSpace.coordinate.latitude)],
+      bayId: parkingSpace.id,
+      index: idx++
+    }
+  });
+};
+
+const onParkingSpaceClicked = (info: any) => {
+  console.log(info.object);
+};
+
+const _renderLayers = (points: any[], currentLocation: Coordinate | undefined) => {
+  const data = _processData(points);
+  const layers = [
+    new ScatterplotLayer({
+      id: 'parking-spaces',
+      getPosition: (d: any) => d.position,
+      getColor: (d: any) => [0, 153, 0],
+      getRadius: (d: any) => 10,
+      opacity: 0.5,
+      pickable: true,
+      radiusMinPixels: 0.25,
+      radiusMaxPixels: 30,
+      // onClick: (info: any) => this.setState({
+      //   clickedObject: info.object,
+      //   pointerX: info.x,
+      //   pointerY: info.y
+      // }),
+      // onClick: (info: any) => console.log(info.object, this.props.points[info.object.index]),
+      onClick: (info: any) => { onParkingSpaceClicked(info) },
+      data
+    })
+  ];
+
+  if (currentLocation) {
+    layers.push(
+      new ScatterplotLayer({
+        id: 'current-location',
+        getPosition: (d: any) => d.position,
+        getColor: (d: any) => [255, 0, 0],
+        getRadius: (d: any) => 10,
+        opacity: 0.5,
+        pickable: true,
+        radiusMinPixels: 0.25,
+        radiusMaxPixels: 30,
+        data: [{
+          position: [currentLocation.longitude, currentLocation.latitude]
+        }]
+      })
+    )
+  }
+  return layers;
+};
+
+const ParkingMap: React.FunctionComponent<IParkingMap> = (props) => {
   // state: IParkingMapState = {
   //   clickedObject: undefined,
   //   points: [],
   //   style: 'mapbox://styles/mapbox/light-v9',
   // };
 
-  constructor(props: IParkingMap) {
-    super(props);
-  }
+  // constructor(props: IParkingMap) {
+  //   super(props);
+  // }
 
   // componentDidMount() {
   //   this._processData();
@@ -58,69 +116,18 @@ class ParkingMap extends Component<IParkingMap> {
   //   );
   // }
 
-  _processData(parkingSpaces: ParkingSpace[]) {
-    return parkingSpaces.map((parkingSpace) => {
-      return {
-        position: [Number(parkingSpace.coordinate.longitude), Number(parkingSpace.coordinate.latitude)],
-        bayId: parkingSpace.id
-      }
-    });
-  }
-
-  _renderLayers(props: {data: any[] | []}, currentLocation: Coordinate | undefined) {
-    const data = this._processData(props.data);
-    const layers = [
-      new ScatterplotLayer({
-        id: 'parking-spaces',
-        getPosition: (d: any) => d.position,
-        getColor: (d: any) => [0, 153, 0],
-        getRadius: (d: any) => 10,
-        opacity: 0.5,
-        pickable: true,
-        radiusMinPixels: 0.25,
-        radiusMaxPixels: 30,
-        // onClick: (info: any) => this.setState({
-        //   clickedObject: info.object,
-        //   pointerX: info.x,
-        //   pointerY: info.y
-        // }),
-        data
-      })
-    ];
-
-    if (currentLocation) {
-      layers.push(
-        new ScatterplotLayer({
-          id: 'current-location',
-          getPosition: (d: any) => d.position,
-          getColor: (d: any) => [255, 0, 0],
-          getRadius: (d: any) => 10,
-          opacity: 0.5,
-          pickable: true,
-          radiusMinPixels: 0.25,
-          radiusMaxPixels: 30,
-          data: [{
-            position: [currentLocation.longitude, currentLocation.latitude]
-          }]
-        })
-      )
-    }
-    return layers;
-  }
-
-  render() {
     return (
       <div>
         <div id="parking-map-wrapper">
           <DeckGL
             initialViewState={INITIAL_VIEW_STATE}
             controller
-            layers={this._renderLayers({data: this.props.points}, this.props.currentLocation)}
+            layers={_renderLayers(props.points, props.currentLocation)}
           >
             <MapView id="map" width="75%">
               <StaticMap
                 mapboxApiAccessToken={MAPBOX_TOKEN}
-                mapStyle={this.props.mapStyle}
+                mapStyle={props.mapStyle}
                 width="100vw" height="100vh"
               />
             </MapView>
@@ -130,8 +137,7 @@ class ParkingMap extends Component<IParkingMap> {
         <LocateMeButton />
       </div>
     )
-  }
-}
+};
 
 const mapStateToProps = (state: ApplicationState) => {
   return {

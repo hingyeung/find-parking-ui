@@ -7,6 +7,7 @@ const initialState: ApplicationState = {
 };
 
 function findParkingApp(state: ApplicationState = initialState, action: any) {
+  console.debug('ACTION', action.type, action.payload);
   switch (action.type) {
     case UPDATE_CURRENT_LOCATION:
       return Object.assign({}, state, {currentLocation: action.payload});

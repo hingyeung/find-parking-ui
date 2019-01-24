@@ -8,21 +8,25 @@ type NavigationControlProps = {
 };
 
 const buildNavUrl = (originLat: number, originLng: number, destLat: number, destLng: number) => {
-  return `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${destLat},${destLng}&travelmode=driving`;
+  return
+};
+
+const buildNavLink = (originCoordinate: Coordinate, clickedMapObject: ClickedMapObject) => {
+  const originLat = originCoordinate.latitude,
+    originLng = originCoordinate.longitude,
+    destLat = clickedMapObject.object.position[1],
+    destLng = clickedMapObject.object.position[0],
+    navLinkUrl = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${destLat},${destLng}&travelmode=driving`;
+
+    return <a target="_blank" className={'navigation-link'} href={navLinkUrl}>Navigate to parking bay {clickedMapObject.object.bayId}</a>
 };
 
 const NavigationControl: React.FunctionComponent<NavigationControlProps> = (props) => {
-  if (props.originCoordinate && props.clickedMapObject) {
-    const navLinkUrl = buildNavUrl(
-      props.originCoordinate.latitude, props.originCoordinate.longitude,
-      props.clickedMapObject.object.position[1], props.clickedMapObject.object.position[0]);
-
-    return (
-      <a target="_blank" className={'navigation-link'} href={navLinkUrl}>Navigate to parking bay {props.clickedMapObject.object.bayId}</a>
-    )
-  } else {
-    return (<div></div>);
-  }
+  return (
+    <div>
+      {props.originCoordinate && props.clickedMapObject && buildNavLink(props.originCoordinate, props.clickedMapObject)}
+    </div>
+  )
 };
 
 const mapStateToProps = (state: ApplicationState) => {

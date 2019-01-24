@@ -7,10 +7,6 @@ type NavigationControlProps = {
   originCoordinate?: Coordinate
 };
 
-const buildNavUrl = (originLat: number, originLng: number, destLat: number, destLng: number) => {
-  return
-};
-
 const buildNavLink = (originCoordinate: Coordinate, clickedMapObject: ClickedMapObject) => {
   const originLat = originCoordinate.latitude,
     originLng = originCoordinate.longitude,

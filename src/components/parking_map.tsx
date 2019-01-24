@@ -1,18 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { StaticMap } from 'react-map-gl';
 import DeckGL, { MapView, ScatterplotLayer } from 'deck.gl';
 import LocateMeButton from './locate_me_button';
-import { ApplicationState, Coordinate, ParkingSpace } from '../types';
+import { ApplicationState, ClickedMapObject, Coordinate, ParkingSpace } from '../types';
 import { connect } from 'react-redux';
-
-// interface IParkingMapState {
-//   clickedObject: any;
-//   pointerX?: number | undefined;
-//   pointerY?: number | undefined;
-//   points: any[];
-//   style: string;
-//   currentLocation?: Coordinate | undefined;
-// }
+import { Dispatch } from "redux";
+import { clickParkingSpace } from "../actions";
 
 const INITIAL_VIEW_STATE = {
   longitude: 144.96332,
@@ -27,13 +20,15 @@ const INITIAL_VIEW_STATE = {
 // Set your mapbox token here
 const MAPBOX_TOKEN = process.env.REACT_APP_MapboxAccessToken;
 
-interface IParkingMap {
+type IParkingMapProps = {
   points: any[] | [];
   mapStyle?: string;
-  currentLocation?: Coordinate
+  currentLocation?: Coordinate,
+  clickedMapObject?: ClickedMapObject,
+  onParkingSpaceClicked: (info: any) => void
 }
 
-const _processData = (parkingSpaces: ParkingSpace[]) => {
+const processData = (parkingSpaces: ParkingSpace[]) => {
   let idx = 0;
   return parkingSpaces.map((parkingSpace) => {
     return {
@@ -44,12 +39,17 @@ const _processData = (parkingSpaces: ParkingSpace[]) => {
   });
 };
 
-const onParkingSpaceClicked = (info: any) => {
-  console.log(info.object);
+const renderTooltip = (props: IParkingMapProps) => {
+  return props.clickedMapObject && (
+    <div className="toolTip" style={{position: 'absolute', zIndex: 1, pointerEvents: 'none', left: props.clickedMapObject.pointerX, top: props.clickedMapObject.pointerY}}>
+      {props.clickedMapObject.object.bayId}
+    </div>
+  )
 };
 
-const _renderLayers = (points: any[], currentLocation: Coordinate | undefined) => {
-  const data = _processData(points);
+const _renderLayers = (props: IParkingMapProps) => {
+  const {points, currentLocation, onParkingSpaceClicked} = props;
+  const data = processData(points);
   const layers = [
     new ScatterplotLayer({
       id: 'parking-spaces',
@@ -60,13 +60,7 @@ const _renderLayers = (points: any[], currentLocation: Coordinate | undefined) =
       pickable: true,
       radiusMinPixels: 0.25,
       radiusMaxPixels: 30,
-      // onClick: (info: any) => this.setState({
-      //   clickedObject: info.object,
-      //   pointerX: info.x,
-      //   pointerY: info.y
-      // }),
-      // onClick: (info: any) => console.log(info.object, this.props.points[info.object.index]),
-      onClick: (info: any) => { onParkingSpaceClicked(info) },
+      onClick: (info: any) => { props.onParkingSpaceClicked(info) },
       data
     })
   ];
@@ -91,38 +85,14 @@ const _renderLayers = (points: any[], currentLocation: Coordinate | undefined) =
   return layers;
 };
 
-const ParkingMap: React.FunctionComponent<IParkingMap> = (props) => {
-  // state: IParkingMapState = {
-  //   clickedObject: undefined,
-  //   points: [],
-  //   style: 'mapbox://styles/mapbox/light-v9',
-  // };
-
-  // constructor(props: IParkingMap) {
-  //   super(props);
-  // }
-
-  // componentDidMount() {
-  //   this._processData();
-  // }
-
-  // _renderTooltip() {
-  //   const state = this.state || {};
-  //   const {clickedObject, pointerX, pointerY} = state;
-  //   return clickedObject && (
-  //     <div className="toolTip" style={{position: 'absolute', zIndex: 1, pointerEvents: 'none', left: pointerX, top: pointerY}}>
-  //       { clickedObject.bayId }
-  //     </div>
-  //   );
-  // }
-
+const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
     return (
       <div>
         <div id="parking-map-wrapper">
           <DeckGL
             initialViewState={INITIAL_VIEW_STATE}
             controller
-            layers={_renderLayers(props.points, props.currentLocation)}
+            layers={_renderLayers(props)}
           >
             <MapView id="map" width="75%">
               <StaticMap
@@ -131,7 +101,7 @@ const ParkingMap: React.FunctionComponent<IParkingMap> = (props) => {
                 width="100vw" height="100vh"
               />
             </MapView>
-               {/*{ this._renderTooltip() }*/}
+            {renderTooltip(props)}
           </DeckGL>
         </div>
         <LocateMeButton />
@@ -143,8 +113,22 @@ const mapStateToProps = (state: ApplicationState) => {
   return {
     points: state.parkingSensorData,
     mapStyle: state.mapStyle,
-    currentLocation: state.currentLocation
+    currentLocation: state.currentLocation,
+    clickedMapObject: state.clickedMapObject
   };
 };
 
-export default connect(mapStateToProps)(ParkingMap);
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    onParkingSpaceClicked: (info: any) => {
+      const clickedMapObj: ClickedMapObject = {
+        object: info.object,
+        pointerX: info.x,
+        pointerY: info.y
+      };
+      dispatch(clickParkingSpace(clickedMapObj));
+    }
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ParkingMap);

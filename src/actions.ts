@@ -1,4 +1,4 @@
-import { ApplicationState, Coordinate, ParkingSpace } from './types';
+import { ApplicationState, ClickedMapObject, Coordinate, ParkingSpace } from './types';
 import { AnyAction } from 'redux';
 import { getCurrentPosition } from './services/location_service';
 import { ThunkDispatch } from 'redux-thunk';
@@ -10,8 +10,17 @@ const UNDEFINED_LOCATION: Coordinate = {
   longitude: 9999
 };
 
-export const UPDATE_CURRENT_LOCATION = 'UPDATE_CURRENT_LOCATION';
-export const UPDATE_AVAILABLE_PARKINGS = "UPDATE_AVAILABLE_PARKINGS";
+const UPDATE_CURRENT_LOCATION = 'UPDATE_CURRENT_LOCATION';
+const UPDATE_AVAILABLE_PARKINGS = "UPDATE_AVAILABLE_PARKINGS";
+const CLICK_PARKING_SPACE = "CLICK_PARKING_SPACE";
+
+export const clickParkingSpace = createAction(
+  CLICK_PARKING_SPACE,
+  resolve => {
+    return (clickedMapObj: ClickedMapObject) => resolve(clickedMapObj);
+  }
+);
+
 export const updateCurrentLocation = createAction(
   UPDATE_CURRENT_LOCATION,
   resolve => {

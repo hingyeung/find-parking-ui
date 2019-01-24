@@ -6,6 +6,7 @@ import { ApplicationState, ClickedMapObject, Coordinate, ParkingSpace } from '..
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
 import { clickParkingSpace } from "../actions";
+import NavigationControl from "./navigation_control";
 
 const INITIAL_VIEW_STATE = {
   longitude: 144.96332,
@@ -55,11 +56,9 @@ const _renderLayers = (props: IParkingMapProps) => {
       id: 'parking-spaces',
       getPosition: (d: any) => d.position,
       getColor: (d: any) => [0, 153, 0],
-      getRadius: (d: any) => 10,
+      getRadius: (d: any) => 15,
       opacity: 0.5,
       pickable: true,
-      radiusMinPixels: 0.25,
-      radiusMaxPixels: 30,
       onClick: (info: any) => { props.onParkingSpaceClicked(info) },
       data
     })
@@ -105,6 +104,7 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
           </DeckGL>
         </div>
         <LocateMeButton />
+        <NavigationControl/>
       </div>
     )
 };

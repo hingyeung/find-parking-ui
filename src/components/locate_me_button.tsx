@@ -12,7 +12,7 @@ type LocateMeButtonProps = {
 
 const LocateMeButton: React.FunctionComponent<LocateMeButtonProps> = (props) => {
   return (
-    <button onClick={(e) => props.fetchCurrentLocation()}>click me</button>
+    <button onClick={(e) => props.fetchCurrentLocation()}>Locate me</button>
   )
 };
 

@@ -12,6 +12,7 @@ const convertAPIParkingSpace = (apiResponseParkingSpaces: APIResponseParkingSpac
         latitude: Number(p.location.coordinates[1]),
         longitude: Number(p.location.coordinates[0])
       },
+      restrictions: p.restrictions,
       id: p.bay_id
     }
   });

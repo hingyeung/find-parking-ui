@@ -9,8 +9,8 @@ const convertAPIParkingSpace = (apiResponseParkingSpaces: APIResponseParkingSpac
   return apiResponseParkingSpaces.map(p => {
     return {
       coordinate: {
-        latitude: Number(p.coordinate.lat),
-        longitude: Number(p.coordinate.lng)
+        latitude: Number(p.location.coordinates[1]),
+        longitude: Number(p.location.coordinates[0])
       },
       id: p.bay_id
     }
@@ -18,7 +18,7 @@ const convertAPIParkingSpace = (apiResponseParkingSpaces: APIResponseParkingSpac
 };
 
 function findAvailableParkings(centreLocation: Coordinate) {
-  const requestUrl = `${API_URL}?lat=${centreLocation.latitude}&lng=${centreLocation.longitude}`;
+  const requestUrl = `${API_URL}?lat=${centreLocation.latitude}&lng=${centreLocation.longitude}&radiusInMeter=500`;
   return new Promise((resolve, reject) => {
     axios.get(requestUrl, {
       timeout: 5000

@@ -16,10 +16,9 @@ export type ParkingSpace = {
 }
 
 export type APIResponseParkingSpace = {
-  coordinate: {
-    lat: string;
-    lng: string;
-  }
+  location: {
+    coordinates: [string, string]
+  };
   bay_id: string;
 }
 

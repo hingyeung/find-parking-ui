@@ -13,6 +13,7 @@ export type ApplicationState = {
 export type ParkingSpace = {
   coordinate: Coordinate;
   id: string;
+  currentRestriction?: APIResponseParkingRestriction;
 }
 
 export type APIResponseParkingRestriction = {
@@ -40,4 +41,11 @@ export type ClickedMapObject = {
   object: any;
   pointerX: number;
   pointerY: number;
+}
+
+export type ClickedMapObjectPayload = {
+  bayId: string;
+  position: [number, number];
+  currentRestriction?: APIResponseParkingRestriction;
+  index: number;
 }

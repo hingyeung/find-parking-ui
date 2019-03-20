@@ -7,6 +7,12 @@ type NavigationControlProps = {
   originCoordinate?: Coordinate
 };
 
+const getCurrentDurationDisplayText = (clickedMapObject: ClickedMapObject) => {
+  return clickedMapObject.object && clickedMapObject.object.currentRestriction ?
+    clickedMapObject.object.currentRestriction.duration + ' minutes' :
+    'Unknown restriction';
+};
+
 const buildNavLink = (originCoordinate: Coordinate, clickedMapObject: ClickedMapObject) => {
   const originLat = originCoordinate.latitude,
     originLng = originCoordinate.longitude,
@@ -14,7 +20,7 @@ const buildNavLink = (originCoordinate: Coordinate, clickedMapObject: ClickedMap
     destLng = clickedMapObject.object.position[0],
     navLinkUrl = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${destLat},${destLng}&travelmode=driving`;
 
-    return <a target="_blank" className={'navigation-link'} href={navLinkUrl}>Navigate to parking bay {clickedMapObject.object.bayId}</a>
+    return <a target="_blank" className={'navigation-link'} href={navLinkUrl}>Navigate to parking bay {clickedMapObject.object.bayId} ({getCurrentDurationDisplayText(clickedMapObject)})</a>
 };
 
 const NavigationControl: React.FunctionComponent<NavigationControlProps> = (props) => {

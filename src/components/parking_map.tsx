@@ -2,7 +2,7 @@ import React from 'react';
 import { StaticMap } from 'react-map-gl';
 import DeckGL, { MapView, ScatterplotLayer } from 'deck.gl';
 import LocateMeButton from './locate_me_button';
-import { ApplicationState, ClickedMapObject, Coordinate, ParkingSpace } from '../types';
+import { ApplicationState, ClickedMapObject, ClickedMapObjectPayload, Coordinate, ParkingSpace } from '../types';
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
 import { clickParkingSpace } from "../actions";
@@ -29,12 +29,13 @@ type IParkingMapProps = {
   onParkingSpaceClicked: (info: any) => void
 }
 
-const processData = (parkingSpaces: ParkingSpace[]) => {
+const processData = (parkingSpaces: ParkingSpace[]): ClickedMapObjectPayload[] => {
   let idx = 0;
   return parkingSpaces.map((parkingSpace) => {
     return {
-      position: [Number(parkingSpace.coordinate.longitude), Number(parkingSpace.coordinate.latitude)],
+      position: [Number(parkingSpace.coordinate.longitude), Number(parkingSpace.coordinate.latitude)] as [number, number],
       bayId: parkingSpace.id,
+      currentRestriction: parkingSpace.currentRestriction,
       index: idx++
     }
   });

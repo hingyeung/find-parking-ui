@@ -43,6 +43,10 @@ export type ClickedMapObject = {
   pointerY: number;
 }
 
+export type MapObjectPayload = {
+  position: [number, number];
+}
+
 export type ClickedMapObjectPayload = {
   bayId: string;
   position: [number, number];

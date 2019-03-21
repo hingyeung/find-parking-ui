@@ -2,7 +2,14 @@ import React from 'react';
 import { StaticMap } from 'react-map-gl';
 import DeckGL, { MapView, ScatterplotLayer } from 'deck.gl';
 import LocateMeButton from './locate_me_button';
-import { ApplicationState, ClickedMapObject, ClickedMapObjectPayload, Coordinate, ParkingSpace } from '../types';
+import {
+  ApplicationState,
+  ClickedMapObject,
+  ClickedMapObjectPayload,
+  Coordinate,
+  MapObjectPayload,
+  ParkingSpace
+} from '../types';
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
 import { clickParkingSpace } from "../actions";
@@ -13,13 +20,19 @@ const INITIAL_VIEW_STATE = {
   latitude: -37.814,
   zoom: 15,
   minZoom: 5,
-  maxZoom: 16,
+  maxZoom: 30,
   pitch: 0,
   bearing: 0
 };
 
 // Set your mapbox token here
 const MAPBOX_TOKEN = process.env.REACT_APP_MapboxAccessToken;
+const LTE_15_COLOUR_COLOUR = [230, 25, 75] as [number, number, number];
+const BTW_16_AND_60_COLOUR = [245, 130, 48] as [number, number, number];
+const BTW_61_AND_120_COLOUR = [240, 50, 230] as [number, number, number];
+const GTE_121_COLOUR = [60, 180, 75] as [number, number, number];
+const UNKNOWN_COLOUR = [128, 128, 128] as [number, number, number];
+const CURRENT_LOC_COLOUR = [74, 137, 243] as [number, number, number];
 
 type IParkingMapProps = {
   points: any[] | [];
@@ -49,37 +62,89 @@ const renderTooltip = (props: IParkingMapProps) => {
   )
 };
 
+const buildScatterplotLayer = (id: string, data: ClickedMapObjectPayload[] | MapObjectPayload[], color: [number, number, number], onClickFn: Function) => {
+  return new ScatterplotLayer({
+    id: 'parking-spaces',
+    getPosition: (d: any) => d.position,
+    getColor: (d: any) => color,
+    getRadius: (d: any) => 6,
+    radiusMinPixels: 4,
+    radiusMaxPixels: 10,
+    opacity: 0.8,
+    pickable: true,
+    onClick: onClickFn,
+    data
+  })
+};
+
 const _renderLayers = (props: IParkingMapProps) => {
   const {points, currentLocation, onParkingSpaceClicked} = props;
   const data = processData(points);
   const layers = [
-    new ScatterplotLayer({
-      id: 'parking-spaces',
-      getPosition: (d: any) => d.position,
-      getColor: (d: any) => [0, 153, 0],
-      getRadius: (d: any) => 15,
-      opacity: 0.5,
-      pickable: true,
-      onClick: (info: any) => { props.onParkingSpaceClicked(info) },
-      data
-    })
+    buildScatterplotLayer(
+      'parking-spaces-lte-15',
+      data.filter(d => {
+        return d.currentRestriction && d.currentRestriction.duration <= 15;
+      }),
+      LTE_15_COLOUR_COLOUR,
+      (info: any) => {
+        props.onParkingSpaceClicked(info)
+      }
+    ),
+    buildScatterplotLayer(
+      'parking-spaces-btw-16-and-60',
+      data.filter(d => {
+        return d.currentRestriction && d.currentRestriction.duration > 15 && d.currentRestriction.duration <= 60;
+      }),
+      BTW_16_AND_60_COLOUR,
+      (info: any) => {
+        props.onParkingSpaceClicked(info)
+      }
+    ),
+    buildScatterplotLayer(
+      'parking-spaces-btw-61-and-120',
+      data.filter(d => {
+        return d.currentRestriction && d.currentRestriction.duration > 61 && d.currentRestriction.duration <= 120;
+      }),
+      BTW_61_AND_120_COLOUR,
+      (info: any) => {
+        props.onParkingSpaceClicked(info)
+      }
+    ),
+    buildScatterplotLayer(
+      'parking-spaces-gte-121',
+      data.filter(d => {
+        return d.currentRestriction && d.currentRestriction.duration > 121;
+      }),
+      GTE_121_COLOUR,
+      (info: any) => {
+        props.onParkingSpaceClicked(info)
+      }
+    ),
+    buildScatterplotLayer(
+      'parking-spaces-unknown',
+      data.filter(d => {
+        return !d.currentRestriction;
+      }),
+      UNKNOWN_COLOUR,
+      (info: any) => {
+        props.onParkingSpaceClicked(info)
+      }
+    )
   ];
 
   if (currentLocation) {
     layers.push(
-      new ScatterplotLayer({
-        id: 'current-location',
-        getPosition: (d: any) => d.position,
-        getColor: (d: any) => [255, 0, 0],
-        getRadius: (d: any) => 10,
-        opacity: 0.5,
-        pickable: true,
-        radiusMinPixels: 0.25,
-        radiusMaxPixels: 30,
-        data: [{
+      buildScatterplotLayer(
+        'parking-spaces-unknown',
+        [{
           position: [currentLocation.longitude, currentLocation.latitude]
-        }]
-      })
+        }],
+        CURRENT_LOC_COLOUR,
+        (info: any) => {
+          props.onParkingSpaceClicked(info)
+        }
+      )
     )
   }
   return layers;

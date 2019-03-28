@@ -64,7 +64,7 @@ const renderTooltip = (props: IParkingMapProps) => {
 
 const buildScatterplotLayer = (id: string, data: ClickedMapObjectPayload[] | MapObjectPayload[], color: [number, number, number], onClickFn: Function) => {
   return new ScatterplotLayer({
-    id: 'parking-spaces',
+    id: id,
     getPosition: (d: any) => d.position,
     getColor: (d: any) => color,
     getRadius: (d: any) => 6,

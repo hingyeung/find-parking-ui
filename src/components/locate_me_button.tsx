@@ -4,15 +4,19 @@ import { connect } from "react-redux";
 import { fetchCurrentLocationAndAvailableParkingsWithThunk } from '../actions';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
+import Fab from '@material-ui/core/Fab';
+import MyLocationIcon from '@material-ui/icons/MyLocation';
 
 
 type LocateMeButtonProps = {
   fetchCurrentLocation: () => void;
 }
 
-const LocateMeButton: React.FunctionComponent<LocateMeButtonProps> = (props) => {
+const LocateMeButton: React.FunctionComponent<LocateMeButtonProps & React.HTMLProps<HTMLButtonElement>> = (props) => {
   return (
-    <button onClick={(e) => props.fetchCurrentLocation()}>Locate me</button>
+    <Fab color="primary" aria-label="Locate me" onClick={(e) => props.fetchCurrentLocation()}>
+      <MyLocationIcon/>
+    </Fab>
   )
 };
 

@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from "redux";
 import { clickParkingSpace } from "../actions";
 import NavigationControl from "./navigation_control";
+import styled from 'styled-components';
 
 const INITIAL_VIEW_STATE = {
   longitude: 144.96332,
@@ -150,6 +151,23 @@ const _renderLayers = (props: IParkingMapProps) => {
   return layers;
 };
 
+const StyledLocateMeButtonContainer = styled('div')`
+  position: absolute;
+  bottom: 25px;
+  right: 25px;
+`;
+
+const StyledNavigationControl = styled(NavigationControl)`
+  position: absolute;
+  bottom: 100px;
+  left: 5%;
+  right: 5%;
+  
+  @media (min-width: 420px) {
+    right: auto;
+  }
+`;
+
 const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
     return (
       <div>
@@ -159,7 +177,7 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
             controller
             layers={_renderLayers(props)}
           >
-            <MapView id="map" width="75%">
+            <MapView id="map">
               <StaticMap
                 mapboxApiAccessToken={MAPBOX_TOKEN}
                 mapStyle={props.mapStyle}
@@ -169,8 +187,10 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
             {renderTooltip(props)}
           </DeckGL>
         </div>
-        <LocateMeButton />
-        <NavigationControl/>
+        <StyledLocateMeButtonContainer>
+          <LocateMeButton />
+        </StyledLocateMeButtonContainer>
+        <StyledNavigationControl/>
       </div>
     )
 };

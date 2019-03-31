@@ -1,6 +1,9 @@
 import React from "react";
 import { ApplicationState, ClickedMapObject, Coordinate } from "../types";
 import { connect } from "react-redux";
+import { Fab, Paper, Typography } from '@material-ui/core';
+import styled from 'styled-components';
+import NavigationIcon from '@material-ui/icons/Navigation';
 
 type NavigationControlProps = {
   clickedMapObject?: ClickedMapObject,
@@ -10,7 +13,7 @@ type NavigationControlProps = {
 const getCurrentDurationDisplayText = (clickedMapObject: ClickedMapObject) => {
   return clickedMapObject.object && clickedMapObject.object.currentRestriction ?
     clickedMapObject.object.currentRestriction.duration + ' minutes' :
-    'Unknown restriction';
+    'unknown restriction';
 };
 
 const buildNavLink = (originCoordinate: Coordinate, clickedMapObject: ClickedMapObject) => {
@@ -20,14 +23,26 @@ const buildNavLink = (originCoordinate: Coordinate, clickedMapObject: ClickedMap
     destLng = clickedMapObject.object.position[0],
     navLinkUrl = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${destLat},${destLng}&travelmode=driving`;
 
-    return <a target="_blank" className={'navigation-link'} href={navLinkUrl}>Navigate to parking bay {clickedMapObject.object.bayId} ({getCurrentDurationDisplayText(clickedMapObject)})</a>
+  return (
+    <Fab size="small" color="primary" rel="noreferrer" target="_blank" href={navLinkUrl}><NavigationIcon/></Fab>
+  )
 };
 
-const NavigationControl: React.FunctionComponent<NavigationControlProps> = (props) => {
+const PaperSC = styled(Paper)`
+  padding: 25px;
+`;
+
+const NavigationControl: React.FunctionComponent<NavigationControlProps & React.HTMLProps<HTMLDivElement>> = (props) => {
+  if (! props.clickedMapObject) {
+    return <div/>
+  }
+
   return (
-    <div>
-      {props.originCoordinate && props.clickedMapObject && buildNavLink(props.originCoordinate, props.clickedMapObject)}
-    </div>
+    <PaperSC className={props.className}>
+      <Typography variant={'title'}>
+        Parking Bay {props.clickedMapObject.object.bayId} ({getCurrentDurationDisplayText(props.clickedMapObject)}) {props.originCoordinate && props.clickedMapObject && buildNavLink(props.originCoordinate, props.clickedMapObject)}
+      </Typography>
+    </PaperSC>
   )
 };
 

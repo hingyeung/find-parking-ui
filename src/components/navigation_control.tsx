@@ -1,19 +1,15 @@
 import React from "react";
 import { ApplicationState, ClickedMapObject, Coordinate } from "../types";
 import { connect } from "react-redux";
-import { Fab, Paper, Typography } from '@material-ui/core';
+import { Button, Fab, Paper, Typography } from '@material-ui/core';
 import styled from 'styled-components';
-import NavigationIcon from '@material-ui/icons/Navigation';
+
+import ParkingSign from './parking_sign';
+import StyledDirectionButton from './DirectionButton';
 
 type NavigationControlProps = {
   clickedMapObject?: ClickedMapObject,
   originCoordinate?: Coordinate
-};
-
-const getCurrentDurationDisplayText = (clickedMapObject: ClickedMapObject) => {
-  return clickedMapObject.object && clickedMapObject.object.currentRestriction ?
-    clickedMapObject.object.currentRestriction.duration + ' minutes' :
-    'unknown restriction';
 };
 
 const buildNavLink = (originCoordinate: Coordinate, clickedMapObject: ClickedMapObject) => {
@@ -24,7 +20,7 @@ const buildNavLink = (originCoordinate: Coordinate, clickedMapObject: ClickedMap
     navLinkUrl = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${destLat},${destLng}&travelmode=driving`;
 
   return (
-    <Fab size="small" color="primary" rel="noreferrer" target="_blank" href={navLinkUrl}><NavigationIcon/></Fab>
+    <StyledDirectionButton directionLink={navLinkUrl}/>
   )
 };
 
@@ -37,10 +33,14 @@ const NavigationControl: React.FunctionComponent<NavigationControlProps & React.
     return <div/>
   }
 
+  const duration = props.clickedMapObject.object && props.clickedMapObject.object.currentRestriction ?
+    props.clickedMapObject.object.currentRestriction.duration :
+    undefined;
+
   return (
     <PaperSC className={props.className}>
       <Typography variant={'title'}>
-        Parking Bay {props.clickedMapObject.object.bayId} ({getCurrentDurationDisplayText(props.clickedMapObject)}) {props.originCoordinate && props.clickedMapObject && buildNavLink(props.originCoordinate, props.clickedMapObject)}
+        <ParkingSign minutes={duration}/> {props.originCoordinate && props.clickedMapObject && buildNavLink(props.originCoordinate, props.clickedMapObject)}
       </Typography>
     </PaperSC>
   )

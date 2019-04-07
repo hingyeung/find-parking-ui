@@ -13,7 +13,7 @@ import {
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
 import { clickParkingSpace } from "../actions";
-import NavigationControl from "./navigation_control";
+import DirectionPanel from "./direction_panel";
 import styled from 'styled-components';
 
 const INITIAL_VIEW_STATE = {
@@ -38,9 +38,9 @@ const CURRENT_LOC_COLOUR = [74, 137, 243] as [number, number, number];
 type IParkingMapProps = {
   points: any[] | [];
   mapStyle?: string;
-  currentLocation?: Coordinate,
-  clickedMapObject?: ClickedMapObject,
-  onParkingSpaceClicked: (info: any) => void
+  currentLocation?: Coordinate;
+  clickedMapObject?: ClickedMapObject;
+  onParkingSpaceClicked: (info: any) => void;
 }
 
 const processData = (parkingSpaces: ParkingSpace[]): ClickedMapObjectPayload[] => {
@@ -137,7 +137,7 @@ const _renderLayers = (props: IParkingMapProps) => {
   if (currentLocation) {
     layers.push(
       buildScatterplotLayer(
-        'parking-spaces-unknown',
+        'current-location',
         [{
           position: [currentLocation.longitude, currentLocation.latitude]
         }],
@@ -157,14 +157,16 @@ const StyledLocateMeButtonContainer = styled('div')`
   right: 25px;
 `;
 
-const StyledNavigationControl = styled(NavigationControl)`
+const StyledDirectionPanel = styled(DirectionPanel)`
   position: absolute;
   bottom: 100px;
   left: 5%;
-  right: 5%;
+  // right: 5%;
+  width: 80%;
   
   @media (min-width: 420px) {
-    right: auto;
+    // right: auto;
+    width: 40%;
   }
 `;
 
@@ -190,7 +192,7 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
         <StyledLocateMeButtonContainer>
           <LocateMeButton />
         </StyledLocateMeButtonContainer>
-        <StyledNavigationControl/>
+        <StyledDirectionPanel/>
       </div>
     )
 };

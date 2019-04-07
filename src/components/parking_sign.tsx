@@ -3,15 +3,20 @@ import { connect } from 'react-redux';
 import React from 'react';
 import HourParkingSign from './hour_parking_sign';
 import MinuteParkingSign from './minute_parking_sign';
+import UnknownRestrictionParkingSign from './unknown_restriction_parking_sign';
 
 type ParkingSignType = {
-  minutes: number;
+  minutes: number | string;
   className?: string;
 };
 
 const ParkingSign: React.FunctionComponent<ParkingSignType> = (props) => {
   if (!props.minutes) {
     return <span>U</span>;
+  }
+
+  if (typeof props.minutes === 'string') {
+    return <UnknownRestrictionParkingSign />
   }
 
   if ((props.minutes % 60) == 0) {

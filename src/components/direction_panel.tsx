@@ -54,7 +54,7 @@ const DirectionPanel: React.FunctionComponent<DirectionPanelProps & React.HTMLPr
           </Grid>
           {endTime &&
             <Grid item xs={5}>
-              (until {endTime}
+              (until {endTime})
             </Grid>
           }
           <Grid item xs={endTime ? 5 : 10}>

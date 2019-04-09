@@ -13,7 +13,7 @@ import {
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
 import { clickParkingSpace, updateMapViewState } from "../actions";
-import DirectionPanel from "./direction_panel";
+import ParkingInfoPanel from "./parking_info_panel";
 import styled from 'styled-components';
 import ParkingUnknownRestrictionIcon from '../assets/round-local_parking-24px_unknown.svg';
 import ParkingLTE15Icon from '../assets/round-local_parking-24px_lte_15.svg';
@@ -160,16 +160,15 @@ const StyledLocateMeButtonContainer = styled('div')`
   right: 25px;
 `;
 
-const StyledDirectionPanel = styled(DirectionPanel)`
+const StyledDirectionPanel = styled(ParkingInfoPanel)`
   position: absolute;
   bottom: 100px;
   left: 5%;
-  // right: 5%;
+  right: 5%;
   width: 80%;
   
   @media (min-width: 420px) {
-    // right: auto;
-    width: 40%;
+    width: 30%;
   }
 `;
 

@@ -5,7 +5,7 @@ import { Grid, Paper } from '@material-ui/core';
 import styled from 'styled-components';
 
 import ParkingSign from './parking_sign';
-import DirectionButton from './DirectionButton';
+import DirectionButton from './direction_button';
 
 type DirectionPanelProps = {
   clickedMapObject?: ClickedMapObject,
@@ -25,7 +25,18 @@ const buildDirectionButton = (originCoordinate: Coordinate, clickedMapObject: Cl
 };
 
 const PaperSC = styled(Paper)`
-  padding: 25px;
+  padding: 10px;
+  @media (min-width: 768px) {
+    padding: 15px;
+  }
+`;
+
+const ParkingInfo = styled('div')`
+  font-size: 75%;
+`;
+
+const PanelGrid = styled(Grid)`
+  min-height: 4.5rem;
 `;
 
 const currentRestrictionExists = (clickedMapObject: ClickedMapObject) => {
@@ -41,27 +52,31 @@ const DirectionPanel: React.FunctionComponent<DirectionPanelProps & React.HTMLPr
     props.clickedMapObject.object.currentRestriction.duration :
     'Unknown Restriction';
 
-  const endTime = currentRestrictionExists(props.clickedMapObject) ?
-    props.clickedMapObject.object.currentRestriction.endTime :
-    undefined;
+  let endTimeInHHMM;
+  if (currentRestrictionExists(props.clickedMapObject)) {
+    const endTime = props.clickedMapObject.object.currentRestriction.endTime;
+    const hhmmMatched = endTime.match(/(\d{1,2}:\d{1,2}):\d{1,2}/);
+    endTimeInHHMM = hhmmMatched ? hhmmMatched[1] : endTime;
+    console.log('endTimeInHHMM', endTimeInHHMM);
+  }
 
   return (
     <PaperSC className={props.className}>
-      {/*<Typography variant={'title'}>*/}
-        <Grid container justify="center" alignItems="center">
-          <Grid item xs={2}>
-            <ParkingSign minutes={duration}/>
-          </Grid>
-          {endTime &&
-            <Grid item xs={5}>
-              (until {endTime})
+        <PanelGrid container justify="space-between" alignItems="center">
+          <Grid container item xs={4} direction="column" justify="center" alignItems="center">
+            <Grid item>
+              <ParkingSign minutes={duration}/>
             </Grid>
-          }
-          <Grid item xs={endTime ? 5 : 10}>
+            {endTimeInHHMM &&
+            <Grid item>
+                <ParkingInfo>(until {endTimeInHHMM})</ParkingInfo>
+            </Grid>
+            }
+          </Grid>
+          <Grid item xs={8}>
             {props.originCoordinate && props.clickedMapObject && buildDirectionButton(props.originCoordinate, props.clickedMapObject)}
           </Grid>
-        </Grid>
-      {/*</Typography>*/}
+        </PanelGrid>
     </PaperSC>
   )
 };

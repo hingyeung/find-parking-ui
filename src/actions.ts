@@ -4,6 +4,7 @@ import { getCurrentPosition } from './services/location_service';
 import { ThunkDispatch } from 'redux-thunk';
 import { createAction } from 'typesafe-actions';
 import { findAvailableParkings } from "./services/parking_sensor_service";
+import { ViewState } from 'react-map-gl';
 
 const UNDEFINED_LOCATION: Coordinate = {
   latitude: 9999,
@@ -13,11 +14,19 @@ const UNDEFINED_LOCATION: Coordinate = {
 const UPDATE_CURRENT_LOCATION = 'UPDATE_CURRENT_LOCATION';
 const UPDATE_AVAILABLE_PARKINGS = "UPDATE_AVAILABLE_PARKINGS";
 const CLICK_PARKING_SPACE = "CLICK_PARKING_SPACE";
+const UPDATE_MAP_VIEW_STATE = "UPDATE_MAP_VIEW_STATE";
 
 export const clickParkingSpace = createAction(
   CLICK_PARKING_SPACE,
   resolve => {
     return (clickedMapObj: ClickedMapObject) => resolve(clickedMapObj);
+  }
+);
+
+export const updateMapViewState = createAction(
+  UPDATE_MAP_VIEW_STATE,
+  resolve => {
+    return (viewState: ViewState) => resolve(viewState)
   }
 );
 

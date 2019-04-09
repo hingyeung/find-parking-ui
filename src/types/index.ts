@@ -1,3 +1,5 @@
+import { ViewState } from 'react-map-gl';
+
 export type Coordinate = {
   latitude: number;
   longitude: number;
@@ -8,6 +10,7 @@ export type ApplicationState = {
   parkingSensorData: any[];
   mapStyle: string;
   clickedMapObject?: ClickedMapObject;
+  mapViewState: ViewState
 }
 
 export type ParkingSpace = {

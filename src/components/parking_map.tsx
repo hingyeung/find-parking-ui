@@ -1,5 +1,5 @@
 import React from 'react';
-import { StaticMap } from 'react-map-gl';
+import { StaticMap, ViewState, ViewStateChangeInfo } from 'react-map-gl';
 import DeckGL, { IconLayer, MapView, ScatterplotLayer } from 'deck.gl';
 import LocateMeButton from './locate_me_button';
 import {
@@ -12,7 +12,7 @@ import {
 } from '../types';
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
-import { clickParkingSpace } from "../actions";
+import { clickParkingSpace, updateMapViewState } from "../actions";
 import DirectionPanel from "./direction_panel";
 import styled from 'styled-components';
 import ParkingUnknownRestrictionIcon from '../assets/round-local_parking-24px_unknown.svg';
@@ -21,16 +21,6 @@ import ParkingBTW16AND60Icon from '../assets/round-local_parking-24px_btw_16_and
 import ParkingBTW61AND120Icon from '../assets/round-local_parking-24px_btw_61_and_120.svg';
 import ParkingGTE121Icon from '../assets/round-local_parking-24px_gte_121.svg';
 import CurrentLocationIcon from '../assets/round-trip_origin-24px.svg';
-
-const INITIAL_VIEW_STATE = {
-  longitude: 144.96332,
-  latitude: -37.814,
-  zoom: 17,
-  minZoom: 5,
-  maxZoom: 30,
-  pitch: 0,
-  bearing: 0
-};
 
 // Set your mapbox token here
 const MAPBOX_TOKEN = process.env.REACT_APP_MapboxAccessToken;
@@ -41,6 +31,8 @@ type IParkingMapProps = {
   currentLocation?: Coordinate;
   clickedMapObject?: ClickedMapObject;
   onParkingSpaceClicked: (info: any) => void;
+  onMapViewStateChange: (viewState: ViewStateChangeInfo) => void;
+  mapViewState: ViewState;
 }
 
 const processData = (parkingSpaces: ParkingSpace[]): ClickedMapObjectPayload[] => {
@@ -186,17 +178,16 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
       <div>
         <div id="parking-map-wrapper">
           <DeckGL
-            initialViewState={INITIAL_VIEW_STATE}
-            controller
+            onViewStateChange={props.onMapViewStateChange}
+            controller={true}
             layers={_renderLayers(props)}
+            viewState={props.mapViewState}
           >
-            <MapView id="map">
-              <StaticMap
-                mapboxApiAccessToken={MAPBOX_TOKEN}
-                mapStyle={props.mapStyle}
-                width="100vw" height="100vh"
-              />
-            </MapView>
+            <StaticMap
+              mapboxApiAccessToken={MAPBOX_TOKEN}
+              mapStyle={props.mapStyle}
+              width="100vw" height="100vh"
+            />
             {renderTooltip(props)}
           </DeckGL>
         </div>
@@ -209,11 +200,17 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
 };
 
 const mapStateToProps = (state: ApplicationState) => {
+  const mapViewState = {...state.mapViewState};
+  if (state.currentLocation) {
+    mapViewState.latitude = state.currentLocation.latitude;
+    mapViewState.longitude = state.currentLocation.longitude;
+  }
   return {
     points: state.parkingSensorData,
     mapStyle: state.mapStyle,
     currentLocation: state.currentLocation,
-    clickedMapObject: state.clickedMapObject
+    clickedMapObject: state.clickedMapObject,
+    mapViewState: mapViewState
   };
 };
 
@@ -226,6 +223,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         pointerY: info.y
       };
       dispatch(clickParkingSpace(clickedMapObj));
+    },
+    onMapViewStateChange: (viewState: ViewStateChangeInfo) => {
+      dispatch(updateMapViewState(viewState.viewState));
     }
   }
 };

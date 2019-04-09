@@ -15,6 +15,7 @@ const UPDATE_CURRENT_LOCATION = 'UPDATE_CURRENT_LOCATION';
 const UPDATE_AVAILABLE_PARKINGS = "UPDATE_AVAILABLE_PARKINGS";
 const CLICK_PARKING_SPACE = "CLICK_PARKING_SPACE";
 const UPDATE_MAP_VIEW_STATE = "UPDATE_MAP_VIEW_STATE";
+const UPDATE_MAP_LOCATION = "UPDATE_MAP_LOCATION";
 
 export const clickParkingSpace = createAction(
   CLICK_PARKING_SPACE,
@@ -27,6 +28,13 @@ export const updateMapViewState = createAction(
   UPDATE_MAP_VIEW_STATE,
   resolve => {
     return (viewState: ViewState) => resolve(viewState)
+  }
+);
+
+export const updateMapLocation = createAction(
+  UPDATE_MAP_LOCATION,
+  resolve => {
+    return (location: Coordinate) => resolve(location)
   }
 );
 
@@ -60,6 +68,7 @@ export const fetchCurrentLocationWithThunk = () => {
     const currentPosition = await getCurrentPosition();
     console.log('currentPosition fetched', currentPosition);
     dispatch(updateCurrentLocation(currentPosition));
+    dispatch(updateMapLocation(currentPosition));
   };
 };
 

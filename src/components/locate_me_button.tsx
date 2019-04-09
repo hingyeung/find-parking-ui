@@ -6,22 +6,24 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import Fab from '@material-ui/core/Fab';
 import MyLocationIcon from '@material-ui/icons/MyLocation';
+import { ViewState } from 'react-map-gl';
 
 
 type LocateMeButtonProps = {
-  fetchCurrentLocation: () => void;
+  fetchCurrentLocation: (mapViewState: ViewState) => void;
+  mapViewState: ViewState;
 }
 
 const LocateMeButton: React.FunctionComponent<LocateMeButtonProps & React.HTMLProps<HTMLButtonElement>> = (props) => {
   return (
-    <Fab color="primary" aria-label="Locate me" onClick={(e) => props.fetchCurrentLocation()}>
+    <Fab color="primary" aria-label="Locate me" onClick={(e) => props.fetchCurrentLocation(props.mapViewState)}>
       <MyLocationIcon/>
     </Fab>
   )
 };
 
 const mapStateToProps = (state: ApplicationState) => {
-  return {};
+  return {mapViewState: state.mapViewState};
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<ApplicationState, void, AnyAction>) => ({

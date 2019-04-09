@@ -200,17 +200,12 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
 };
 
 const mapStateToProps = (state: ApplicationState) => {
-  const mapViewState = {...state.mapViewState};
-  if (state.currentLocation) {
-    mapViewState.latitude = state.currentLocation.latitude;
-    mapViewState.longitude = state.currentLocation.longitude;
-  }
   return {
     points: state.parkingSensorData,
     mapStyle: state.mapStyle,
     currentLocation: state.currentLocation,
     clickedMapObject: state.clickedMapObject,
-    mapViewState: mapViewState
+    mapViewState: state.mapViewState
   };
 };
 

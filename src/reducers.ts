@@ -1,4 +1,10 @@
-import { clickParkingSpace, updateAvailableParkings, updateCurrentLocation, updateMapViewState } from './actions';
+import {
+  clickParkingSpace,
+  updateAvailableParkings,
+  updateCurrentLocation,
+  updateMapLocation,
+  updateMapViewState
+} from './actions';
 import { ApplicationState } from './types';
 import { getType } from "typesafe-actions";
 
@@ -29,6 +35,14 @@ function findParkingApp(state: ApplicationState = initialState, action: any) {
       return Object.assign({}, state, {clickedMapObject: action.payload});
     case getType(updateMapViewState):
       return Object.assign({}, state, {mapViewState: action.payload});
+    case getType(updateMapLocation):
+      return Object.assign({}, state, {
+        mapViewState: {
+          ...state.mapViewState,
+          latitude: action.payload.latitude,
+          longitude: action.payload.longitude
+        }
+      });
     default:
       console.log('Unknown action', action.type);
       return state;

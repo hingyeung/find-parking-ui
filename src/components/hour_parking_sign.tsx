@@ -8,7 +8,7 @@ type HourParkingSignProps = {
 
 const HourParkingSign: React.FunctionComponent<HourParkingSignProps> = (props) => {
   return (
-    <span className={props.className}>{Math.trunc(props.hours)}P</span>
+    <div className={props.className}>{Math.trunc(props.hours)}P</div>
   );
 };
 

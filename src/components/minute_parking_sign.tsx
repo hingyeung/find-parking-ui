@@ -13,7 +13,7 @@ const StyledMinuteLabel = styled('span')`
 
 const MinuteParkingSign: React.FunctionComponent<MinuteParkingSignProps> = props => {
   return (
-    <span className={props.className}>{Math.trunc(props.minutes)}<StyledMinuteLabel>minute</StyledMinuteLabel></span>
+    <div className={props.className}>{Math.trunc(props.minutes)}<StyledMinuteLabel>minute</StyledMinuteLabel></div>
   )
 };
 

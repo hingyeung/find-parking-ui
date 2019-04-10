@@ -31,16 +31,18 @@ const PaperSC = styled(Paper)`
   }
 `;
 
-const ParkingInfo = styled('div')`
-  font-size: 75%;
-`;
-
 const PanelGrid = styled(Grid)`
   min-height: 4.5rem;
+  text-align: center;
 `;
 
 const currentRestrictionExists = (clickedMapObject: ClickedMapObject) => {
   return clickedMapObject.object && clickedMapObject.object.currentRestriction;
+};
+
+const convertHHMMSSToHHMM = (hhmmss: string): string => {
+  const hhmmMatched = hhmmss.match(/(\d{1,2}:\d{1,2}):\d{1,2}/);
+  return hhmmMatched ? hhmmMatched[1] : hhmmss;
 };
 
 const DirectionPanel: React.FunctionComponent<DirectionPanelProps & React.HTMLProps<HTMLDivElement>> = (props) => {
@@ -52,28 +54,20 @@ const DirectionPanel: React.FunctionComponent<DirectionPanelProps & React.HTMLPr
     props.clickedMapObject.object.currentRestriction.duration :
     'Unknown Restriction';
 
-  let endTimeInHHMM;
+  let parkingSignTimeRangeDesc;
   if (currentRestrictionExists(props.clickedMapObject)) {
-    const endTime = props.clickedMapObject.object.currentRestriction.endTime;
-    const hhmmMatched = endTime.match(/(\d{1,2}:\d{1,2}):\d{1,2}/);
-    endTimeInHHMM = hhmmMatched ? hhmmMatched[1] : endTime;
-    console.log('endTimeInHHMM', endTimeInHHMM);
+    const startTimeInHHMM = convertHHMMSSToHHMM(props.clickedMapObject.object.currentRestriction.startTime);
+    const endTimeInHHMM = convertHHMMSSToHHMM(props.clickedMapObject.object.currentRestriction.endTime);
+    parkingSignTimeRangeDesc = `${startTimeInHHMM} - ${endTimeInHHMM}`;
   }
 
   return (
     <PaperSC className={props.className}>
         <PanelGrid container justify="space-between" alignItems="center">
           <Grid container item xs={4} direction="column" justify="center" alignItems="center">
-            <Grid item>
-              <ParkingSign minutes={duration}/>
-            </Grid>
-            {endTimeInHHMM &&
-            <Grid item>
-                <ParkingInfo>(until {endTimeInHHMM})</ParkingInfo>
-            </Grid>
-            }
+            <ParkingSign minutes={duration} timeRangeDesc={parkingSignTimeRangeDesc}/>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={8} justify="center">
             {props.originCoordinate && props.clickedMapObject && buildDirectionButton(props.originCoordinate, props.clickedMapObject)}
           </Grid>
         </PanelGrid>

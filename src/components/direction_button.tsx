@@ -9,7 +9,6 @@ type DirectionButtonProps = {
 }
 const DirectionButton: React.FunctionComponent<DirectionButtonProps> = props => {
   return <Button
-    fullWidth
     className={props.className}
     size="small"
     variant={'outlined'}
@@ -22,7 +21,7 @@ const DirectionButton: React.FunctionComponent<DirectionButtonProps> = props => 
 };
 
 const StyledDirectionButton = styled(DirectionButton)`
-  background-color: blue;
+  width: 80%;
 `;
 
 export default StyledDirectionButton;

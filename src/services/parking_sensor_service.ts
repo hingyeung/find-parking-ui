@@ -36,10 +36,12 @@ const getCurrentParkingRestriction = (parkingRestrictions: APIResponseParkingRes
     endTime.setHours(+endHM[1], +endHM[2]);
 
     return (
-      // 1. filter out all restrictions that don't apply to the current day (0-6, Sunday is 0)
-      now.getDay() >= restriction.fromDay && now.getDay() <= restriction.toDay &&
-      // 2. filter by time range
-        now.getTime() >= startTime.getTime() && now.getTime() <= endTime.getTime()
+      // 1. if fromDay is 1 and toDay is 0, it applies to any day of the week (Mon to Sun)
+      ((restriction.fromDay === 1 && restriction.toDay === 0) ||
+      // 2. filter out all restrictions that don't apply to the current day (0-6, Sunday is 0)
+        now.getDay() >= restriction.fromDay && now.getDay() <= restriction.toDay) &&
+      // 3. filter by time range
+      now.getTime() >= startTime.getTime() && now.getTime() <= endTime.getTime()
     );
   });
 

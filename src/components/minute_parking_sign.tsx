@@ -8,7 +8,7 @@ type MinuteParkingSignProps = {
 
 const StyledMinuteLabel = styled('span')`
   text-transform: uppercase;
-  font-size: 75%;
+  font-size: 30%;
 `;
 
 const MinuteParkingSign: React.FunctionComponent<MinuteParkingSignProps> = props => {

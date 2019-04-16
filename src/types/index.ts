@@ -17,7 +17,7 @@ export type ApplicationState = {
 export type ParkingSpace = {
   coordinate: Coordinate;
   id: string;
-  currentRestriction?: APIResponseParkingRestriction;
+  currentRestriction?: ParkingRestriction;
 }
 
 export type APIResponseParkingRestriction = {
@@ -32,6 +32,13 @@ export type APIResponseParkingRestriction = {
   readonly startTime: string;
   readonly endTime: string;
 };
+
+export type ParkingRestriction = {
+  readonly isDisabledOnly: boolean;
+  readonly disabilityDuration: number;
+  readonly isMetered: boolean;
+  readonly isLoadingZone: boolean;
+} & APIResponseParkingRestriction;
 
 export type APIResponseParkingSpace = {
   location: {

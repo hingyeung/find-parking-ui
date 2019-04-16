@@ -1,5 +1,6 @@
 import { APIResponseParkingRestriction, APIResponseParkingSpace, Coordinate, ParkingSpace } from "../types";
 import { AxiosError, AxiosResponse } from "axios";
+import convertToParkingRestriction from '../helper/parse_parking_restriction_description';
 
 const axios = require('axios');
 
@@ -45,7 +46,9 @@ const getCurrentParkingRestriction = (parkingRestrictions: APIResponseParkingRes
     );
   });
 
-  return remainingRestrictions.length == 1 ? remainingRestrictions[0] : undefined;
+  return remainingRestrictions.length === 1 ?
+    convertToParkingRestriction(remainingRestrictions[0]) :
+    undefined;
 };
 
 function findAvailableParkings(centreLocation: Coordinate) {

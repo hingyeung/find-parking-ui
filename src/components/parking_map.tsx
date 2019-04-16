@@ -12,7 +12,7 @@ import {
 } from '../types';
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
-import { clickParkingSpace, updateMapViewState } from "../actions";
+import { clickParkingSpace, hoverOnParkingIcon, updateMapViewState } from "../actions";
 import ParkingInfoPanel from "./parking_info_panel";
 import styled from 'styled-components';
 import ParkingUnknownRestrictionIcon from '../assets/round-local_parking-24px_unknown.svg';
@@ -32,7 +32,9 @@ type IParkingMapProps = {
   clickedMapObject?: ClickedMapObject;
   onParkingSpaceClicked: (info: any) => void;
   onMapViewStateChange: (viewState: ViewStateChangeInfo) => void;
+  hoverOnParkingIcon: (isHovering: boolean) => void;
   mapViewState: ViewState;
+  hoveringOnParkingIcon: boolean;
 }
 
 const processData = (parkingSpaces: ParkingSpace[]): ClickedMapObjectPayload[] => {
@@ -55,7 +57,7 @@ const renderTooltip = (props: IParkingMapProps) => {
   )
 };
 
-const buildScatterplotLayer = (id: string, icon: string, data: ClickedMapObjectPayload[] | MapObjectPayload[], onClickFn: Function) => {
+const buildIconLayer = (id: string, icon: string, data: ClickedMapObjectPayload[] | MapObjectPayload[], onClickFn: Function, onHoverOnParkingIconFn: Function) => {
   return new IconLayer({
     id: id,
     getPosition: (d: any) => d.position,
@@ -65,6 +67,9 @@ const buildScatterplotLayer = (id: string, icon: string, data: ClickedMapObjectP
     opacity: 0.8,
     pickable: true,
     onClick: onClickFn,
+    autoHighlight: true,
+    // undefined info.object indicates hover-off
+    onHover: (info: any, event: any) => {onHoverOnParkingIconFn(info.object !== undefined);},
     iconAtlas: icon,
     iconMapping: {
       marker: {
@@ -85,7 +90,7 @@ const _renderLayers = (props: IParkingMapProps) => {
   const {points, currentLocation, onParkingSpaceClicked} = props;
   const data = processData(points);
   const layers = [
-    buildScatterplotLayer(
+    buildIconLayer(
       'parking-spaces-lte-15',
       ParkingLTE15Icon,
       data.filter(d => {
@@ -93,9 +98,10 @@ const _renderLayers = (props: IParkingMapProps) => {
       }),
       (info: any) => {
         props.onParkingSpaceClicked(info)
-      }
+      },
+      props.hoverOnParkingIcon
     ),
-    buildScatterplotLayer(
+    buildIconLayer(
       'parking-spaces-btw-16-and-60',
       ParkingBTW16AND60Icon,
       data.filter(d => {
@@ -103,9 +109,10 @@ const _renderLayers = (props: IParkingMapProps) => {
       }),
       (info: any) => {
         props.onParkingSpaceClicked(info)
-      }
+      },
+      props.hoverOnParkingIcon
     ),
-    buildScatterplotLayer(
+    buildIconLayer(
       'parking-spaces-btw-61-and-120',
       ParkingBTW61AND120Icon,
       data.filter(d => {
@@ -113,9 +120,10 @@ const _renderLayers = (props: IParkingMapProps) => {
       }),
       (info: any) => {
         props.onParkingSpaceClicked(info)
-      }
+      },
+      props.hoverOnParkingIcon
     ),
-    buildScatterplotLayer(
+    buildIconLayer(
       'parking-spaces-gte-121',
       ParkingGTE121Icon,
       data.filter(d => {
@@ -123,9 +131,10 @@ const _renderLayers = (props: IParkingMapProps) => {
       }),
       (info: any) => {
         props.onParkingSpaceClicked(info)
-      }
+      },
+      props.hoverOnParkingIcon
     ),
-    buildScatterplotLayer(
+    buildIconLayer(
       'parking-spaces-unknown',
       ParkingUnknownRestrictionIcon,
       data.filter(d => {
@@ -133,13 +142,14 @@ const _renderLayers = (props: IParkingMapProps) => {
       }),
       (info: any) => {
         props.onParkingSpaceClicked(info)
-      }
+      },
+      props.hoverOnParkingIcon
     )
   ];
 
   if (currentLocation) {
     layers.push(
-      buildScatterplotLayer(
+      buildIconLayer(
         'current-location',
         CurrentLocationIcon,
         [{
@@ -147,7 +157,8 @@ const _renderLayers = (props: IParkingMapProps) => {
         }],
         (info: any) => {
           props.onParkingSpaceClicked(info)
-        }
+        },
+        () => {}
       )
     )
   }
@@ -181,6 +192,7 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
             controller={true}
             layers={_renderLayers(props)}
             viewState={props.mapViewState}
+            getCursor={() => {return props.hoveringOnParkingIcon ? 'pointer' : 'grab'}}
           >
             <StaticMap
               mapboxApiAccessToken={MAPBOX_TOKEN}
@@ -204,7 +216,8 @@ const mapStateToProps = (state: ApplicationState) => {
     mapStyle: state.mapStyle,
     currentLocation: state.currentLocation,
     clickedMapObject: state.clickedMapObject,
-    mapViewState: state.mapViewState
+    mapViewState: state.mapViewState,
+    hoveringOnParkingIcon: state.hoveringOnParkingIcon
   };
 };
 
@@ -220,6 +233,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     },
     onMapViewStateChange: (viewState: ViewStateChangeInfo) => {
       dispatch(updateMapViewState(viewState.viewState));
+    },
+    hoverOnParkingIcon: (isHovering: boolean) => {
+      dispatch(hoverOnParkingIcon(isHovering));
     }
   }
 };

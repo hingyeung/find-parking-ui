@@ -10,7 +10,8 @@ export type ApplicationState = {
   parkingSensorData: any[];
   mapStyle: string;
   clickedMapObject?: ClickedMapObject;
-  mapViewState: ViewState
+  mapViewState: ViewState;
+  hoveringOnParkingIcon: boolean;
 }
 
 export type ParkingSpace = {

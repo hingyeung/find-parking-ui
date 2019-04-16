@@ -16,6 +16,14 @@ const UPDATE_AVAILABLE_PARKINGS = "UPDATE_AVAILABLE_PARKINGS";
 const CLICK_PARKING_SPACE = "CLICK_PARKING_SPACE";
 const UPDATE_MAP_VIEW_STATE = "UPDATE_MAP_VIEW_STATE";
 const UPDATE_MAP_LOCATION = "UPDATE_MAP_LOCATION";
+const HOVER_ON_PARKING_ICON = "HOVER_ON_PARKING_ICON";
+
+export const hoverOnParkingIcon = createAction(
+  HOVER_ON_PARKING_ICON,
+  resolve => {
+    return (isHovering: boolean) => resolve(isHovering);
+  }
+);
 
 export const clickParkingSpace = createAction(
   CLICK_PARKING_SPACE,

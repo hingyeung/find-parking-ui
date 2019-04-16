@@ -1,5 +1,5 @@
 import {
-  clickParkingSpace,
+  clickParkingSpace, hoverOnParkingIcon,
   updateAvailableParkings,
   updateCurrentLocation,
   updateMapLocation,
@@ -21,7 +21,8 @@ const INITIAL_VIEW_STATE = {
 const initialState: ApplicationState = {
   parkingSensorData: [],
   mapStyle: 'mapbox://styles/mapbox/light-v9',
-  mapViewState: INITIAL_VIEW_STATE
+  mapViewState: INITIAL_VIEW_STATE,
+  hoveringOnParkingIcon: false
 };
 
 function findParkingApp(state: ApplicationState = initialState, action: any) {
@@ -43,6 +44,8 @@ function findParkingApp(state: ApplicationState = initialState, action: any) {
           longitude: action.payload.longitude
         }
       });
+    case getType(hoverOnParkingIcon):
+      return Object.assign({}, state, {hoveringOnParkingIcon: action.payload});
     default:
       console.log('Unknown action', action.type);
       return state;

@@ -44,7 +44,11 @@ const ParkingSign: React.FunctionComponent<ParkingSignType> = (props) => {
 };
 
 const StyledParkingSign = styled(ParkingSign)`
-  font-size: 300%;
+  font-size: 250%;
+  
+  @media (min-width: 420px) {
+    font-size: 300%;
+  }
 `;
 
 const mapStateToProps = (state: ApplicationState) => {

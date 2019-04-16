@@ -168,7 +168,7 @@ const StyledDirectionPanel = styled(ParkingInfoPanel)`
   width: 80%;
   
   @media (min-width: 420px) {
-    width: 30%;
+    width: 45%;
   }
 `;
 

@@ -61,6 +61,6 @@ export type MapObjectPayload = {
 export type ClickedMapObjectPayload = {
   bayId: string;
   position: [number, number];
-  currentRestriction?: APIResponseParkingRestriction;
+  currentRestriction?: ParkingRestriction;
   index: number;
 }

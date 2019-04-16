@@ -7,7 +7,7 @@ import {
   ClickedMapObject,
   ClickedMapObjectPayload,
   Coordinate,
-  MapObjectPayload,
+  MapObjectPayload, ParkingRestriction,
   ParkingSpace
 } from '../types';
 import { connect } from 'react-redux';
@@ -21,9 +21,16 @@ import ParkingBTW16AND60Icon from '../assets/round-local_parking-24px_btw_16_and
 import ParkingBTW61AND120Icon from '../assets/round-local_parking-24px_btw_61_and_120.svg';
 import ParkingGTE121Icon from '../assets/round-local_parking-24px_gte_121.svg';
 import CurrentLocationIcon from '../assets/round-trip_origin-24px.svg';
+import ParkingIcon from '../assets/round-local_parking-24px.svg';
 
 // Set your mapbox token here
 const MAPBOX_TOKEN = process.env.REACT_APP_MapboxAccessToken;
+const LTE_15_COLOUR_COLOUR = [230, 25, 75] as [number, number, number];
+const BTW_16_AND_60_COLOUR = [245, 130, 48] as [number, number, number];
+const BTW_61_AND_120_COLOUR = [240, 50, 230] as [number, number, number];
+const GTE_121_COLOUR = [60, 180, 75] as [number, number, number];
+const UNKNOWN_COLOUR = [128, 128, 128] as [number, number, number];
+const CURRENT_LOC_COLOUR = [74, 137, 243] as [number, number, number];
 
 type IParkingMapProps = {
   points: any[] | [];
@@ -57,7 +64,18 @@ const renderTooltip = (props: IParkingMapProps) => {
   )
 };
 
-const buildIconLayer = (id: string, icon: string, data: ClickedMapObjectPayload[] | MapObjectPayload[], onClickFn: Function, onHoverOnParkingIconFn: Function) => {
+const getParkingIconColour = (currentRestriction: ParkingRestriction | undefined) => {
+  if (! currentRestriction) { return UNKNOWN_COLOUR; }
+
+  if (currentRestriction.duration <= 15) return LTE_15_COLOUR_COLOUR;
+  if (currentRestriction.duration > 15 && currentRestriction.duration <= 60) return BTW_16_AND_60_COLOUR;
+  if (currentRestriction.duration > 61 && currentRestriction.duration <= 120) return BTW_61_AND_120_COLOUR;
+  if (currentRestriction.duration > 121) return GTE_121_COLOUR;
+
+  return UNKNOWN_COLOUR;
+};
+
+const buildIconLayer = (id: string, icon: string, data: ClickedMapObjectPayload[] | MapObjectPayload[], onClickFn: Function, onHoverOnParkingIconFn: Function, getColorFn: Function | undefined) => {
   return new IconLayer({
     id: id,
     getPosition: (d: any) => d.position,
@@ -76,11 +94,16 @@ const buildIconLayer = (id: string, icon: string, data: ClickedMapObjectPayload[
         x: 0,
         y: 0,
         width: 24,
-        height: 24
+        height: 24,
+        // whether icon is treated as a transparency mask.
+        // If true, user defined color is applied.
+        // If false, original color from the image is applied.
+        mask: true
       }
     },
-    getIcon: (d: any) => 'marker',
-    getSize: (d: any) => 30,
+    getColor: getColorFn || ((d: ClickedMapObjectPayload) => getParkingIconColour(d.currentRestriction)),
+    getIcon: (d: ClickedMapObjectPayload) => 'marker',
+    getSize: (d: ClickedMapObjectPayload) => 30,
     sizeScale: 1,
     data
   })
@@ -91,59 +114,14 @@ const _renderLayers = (props: IParkingMapProps) => {
   const data = processData(points);
   const layers = [
     buildIconLayer(
-      'parking-spaces-lte-15',
-      ParkingLTE15Icon,
-      data.filter(d => {
-        return d.currentRestriction && d.currentRestriction.duration <= 15;
-      }),
+      'parking-spaces',
+      ParkingIcon,
+      data,
       (info: any) => {
         props.onParkingSpaceClicked(info)
       },
-      props.hoverOnParkingIcon
-    ),
-    buildIconLayer(
-      'parking-spaces-btw-16-and-60',
-      ParkingBTW16AND60Icon,
-      data.filter(d => {
-        return d.currentRestriction && d.currentRestriction.duration > 15 && d.currentRestriction.duration <= 60;
-      }),
-      (info: any) => {
-        props.onParkingSpaceClicked(info)
-      },
-      props.hoverOnParkingIcon
-    ),
-    buildIconLayer(
-      'parking-spaces-btw-61-and-120',
-      ParkingBTW61AND120Icon,
-      data.filter(d => {
-        return d.currentRestriction && d.currentRestriction.duration > 61 && d.currentRestriction.duration <= 120;
-      }),
-      (info: any) => {
-        props.onParkingSpaceClicked(info)
-      },
-      props.hoverOnParkingIcon
-    ),
-    buildIconLayer(
-      'parking-spaces-gte-121',
-      ParkingGTE121Icon,
-      data.filter(d => {
-        return d.currentRestriction && d.currentRestriction.duration > 121;
-      }),
-      (info: any) => {
-        props.onParkingSpaceClicked(info)
-      },
-      props.hoverOnParkingIcon
-    ),
-    buildIconLayer(
-      'parking-spaces-unknown',
-      ParkingUnknownRestrictionIcon,
-      data.filter(d => {
-        return !d.currentRestriction;
-      }),
-      (info: any) => {
-        props.onParkingSpaceClicked(info)
-      },
-      props.hoverOnParkingIcon
+      props.hoverOnParkingIcon,
+      undefined
     )
   ];
 
@@ -158,7 +136,8 @@ const _renderLayers = (props: IParkingMapProps) => {
         (info: any) => {
           props.onParkingSpaceClicked(info)
         },
-        () => {}
+        () => {},
+        () => [86, 131, 255]
       )
     )
   }

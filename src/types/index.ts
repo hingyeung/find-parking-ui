@@ -12,6 +12,8 @@ export type ApplicationState = {
   clickedMapObject?: ClickedMapObject;
   mapViewState: ViewState;
   hoveringOnParkingIcon: boolean;
+  showLoadingZonesOnly: boolean;
+  inAccessibleMode: boolean;
 }
 
 export type ParkingSpace = {

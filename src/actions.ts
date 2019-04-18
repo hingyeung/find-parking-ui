@@ -17,6 +17,22 @@ const CLICK_PARKING_SPACE = "CLICK_PARKING_SPACE";
 const UPDATE_MAP_VIEW_STATE = "UPDATE_MAP_VIEW_STATE";
 const UPDATE_MAP_LOCATION = "UPDATE_MAP_LOCATION";
 const HOVER_ON_PARKING_ICON = "HOVER_ON_PARKING_ICON";
+const TOGGLE_SHOW_LOADING_ZONES_ONLY = "TOGGLE_SHOW_LOADING_ZONES_ONLY";
+const TOGGLE_ACCESSIBLE_MODE = "TOGGLE_ACCESSIBLE_MODE";
+
+export const toggleShowLoadingZonesOnly = createAction(
+  TOGGLE_SHOW_LOADING_ZONES_ONLY,
+  resolve => {
+    return () => resolve();
+  }
+);
+
+export const toggleAccessibleMode = createAction(
+  TOGGLE_ACCESSIBLE_MODE,
+  resolve => {
+    return () => resolve();
+  }
+);
 
 export const hoverOnParkingIcon = createAction(
   HOVER_ON_PARKING_ICON,

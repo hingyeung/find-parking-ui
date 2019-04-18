@@ -2,6 +2,8 @@ import React from 'react';
 import { StaticMap, ViewState, ViewStateChangeInfo } from 'react-map-gl';
 import DeckGL, { IconLayer, MapView, ScatterplotLayer } from 'deck.gl';
 import LocateMeButton from './locate_me_button';
+import LoadingZoneIcon from '@material-ui/icons/LocalShipping';
+import AccessibleIcon from '@material-ui/icons/Accessible';
 import {
   ApplicationState,
   ClickedMapObject,
@@ -13,11 +15,18 @@ import {
 } from '../types';
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
-import { clickParkingSpace, hoverOnParkingIcon, updateMapViewState } from "../actions";
+import {
+  clickParkingSpace,
+  hoverOnParkingIcon,
+  toggleAccessibleMode,
+  toggleShowLoadingZonesOnly,
+  updateMapViewState
+} from "../actions";
 import ParkingInfoPanel from "./parking_info_panel";
 import styled from 'styled-components';
 import CurrentLocationIcon from '../assets/round-trip_origin-24px.svg';
 import ParkingIcon from '../assets/round-local_parking-24px.svg';
+import { AppBar, IconButton, Toolbar } from '@material-ui/core';
 
 // Set your mapbox token here
 const MAPBOX_TOKEN = process.env.REACT_APP_MapboxAccessToken;
@@ -26,7 +35,7 @@ const BTW_16_AND_60_COLOUR = [245, 130, 48] as [number, number, number];
 const BTW_61_AND_120_COLOUR = [240, 50, 230] as [number, number, number];
 const GTE_121_COLOUR = [60, 180, 75] as [number, number, number];
 const UNKNOWN_COLOUR = [128, 128, 128] as [number, number, number];
-const CURRENT_LOC_COLOUR = [74, 137, 243] as [number, number, number];
+const CURRENT_LOC_COLOUR = [86, 131, 255] as [number, number, number];
 
 type IParkingMapProps = {
   availableParkingSpaces: any[] | [];
@@ -38,18 +47,35 @@ type IParkingMapProps = {
   hoverOnParkingIcon: (isHovering: boolean) => void;
   mapViewState: ViewState;
   hoveringOnParkingIcon: boolean;
+  showAccessibleOnly: boolean;
+  showLoadingZonesOnly: boolean;
+  toggleShowLoadingZonesOnly: () => void;
+  toggleAccessibleMode: () => void;
 }
 
-const removeLoadingZone = (parkings: ClickedMapObjectPayload[]) => {
+const doShowLoadingZonesOnly = (parkings: ClickedMapObjectPayload[], showLoadingZonesOnly: boolean) => {
   return parkings.filter(
     parking => {
-      return !parking.currentRestriction || !parking.currentRestriction.isLoadingZone;
+      return !parking.currentRestriction ||
+        (showLoadingZonesOnly ? parking.currentRestriction.isLoadingZone : !parking.currentRestriction.isLoadingZone);
     });
 };
 
-const processData = (parkingSpaces: ParkingSpace[]): ClickedMapObjectPayload[] => {
+const doHandleAccessibleMode = (parkings: ClickedMapObjectPayload[], inAccessibleMode: boolean) => {
+  if (inAccessibleMode) {
+    return parkings;
+  }
+
+  return parkings.filter(
+    parking => {
+      return !parking.currentRestriction || !parking.currentRestriction.isDisabledOnly;
+    }
+  )
+};
+
+const processData = (inAccessibleMode: boolean, showLoadingZonesOnly: boolean, parkingSpaces: ParkingSpace[]): ClickedMapObjectPayload[] => {
   let idx = 0;
-  const parkingsToShow = parkingSpaces.map((parkingSpace) => {
+  let parkingsToShow: ClickedMapObjectPayload[] = parkingSpaces.map((parkingSpace) => {
     return {
       position: [Number(parkingSpace.coordinate.longitude), Number(parkingSpace.coordinate.latitude)] as [number, number],
       bayId: parkingSpace.id,
@@ -57,7 +83,10 @@ const processData = (parkingSpaces: ParkingSpace[]): ClickedMapObjectPayload[] =
       index: idx++
     }
   });
-  return removeLoadingZone(parkingsToShow);
+
+  parkingsToShow = doHandleAccessibleMode(parkingsToShow, inAccessibleMode);
+  parkingsToShow = doShowLoadingZonesOnly(parkingsToShow, showLoadingZonesOnly);
+  return parkingsToShow;
 };
 
 const renderTooltip = (props: IParkingMapProps) => {
@@ -140,7 +169,7 @@ const _renderLayers = (props: IParkingMapProps) => {
           props.onParkingSpaceClicked(info)
         },
         () => {},
-        () => [86, 131, 255]
+        () => CURRENT_LOC_COLOUR
       )
     )
   }
@@ -188,18 +217,33 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
           <LocateMeButton />
         </StyledLocateMeButtonContainer>
         <StyledDirectionPanel/>
+        <AppBar position="fixed" color="primary">
+          <Toolbar>
+            <IconButton color="inherit" onClick={props.toggleShowLoadingZonesOnly}>
+              <LoadingZoneIcon/>
+            </IconButton>
+            <IconButton color="inherit" onClick={props.toggleAccessibleMode}>
+              <AccessibleIcon/>
+            </IconButton>
+          </Toolbar>
+        </AppBar>
       </div>
     )
 };
 
 const mapStateToProps = (state: ApplicationState) => {
   return {
-    availableParkingSpaces: processData(state.parkingSensorData),
+    availableParkingSpaces: processData(
+      state.inAccessibleMode,
+      state.showLoadingZonesOnly,
+      state.parkingSensorData),
     mapStyle: state.mapStyle,
     currentLocation: state.currentLocation,
     clickedMapObject: state.clickedMapObject,
     mapViewState: state.mapViewState,
-    hoveringOnParkingIcon: state.hoveringOnParkingIcon
+    hoveringOnParkingIcon: state.hoveringOnParkingIcon,
+    inAccessibleMode: state.inAccessibleMode,
+    showLoadingZonesOnly: state.showLoadingZonesOnly
   };
 };
 
@@ -218,6 +262,12 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     },
     hoverOnParkingIcon: (isHovering: boolean) => {
       dispatch(hoverOnParkingIcon(isHovering));
+    },
+    toggleShowLoadingZonesOnly: () => {
+      dispatch(toggleShowLoadingZonesOnly());
+    },
+    toggleAccessibleMode: () => {
+      dispatch(toggleAccessibleMode());
     }
   }
 };

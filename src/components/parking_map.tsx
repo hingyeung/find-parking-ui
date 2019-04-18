@@ -7,7 +7,8 @@ import {
   ClickedMapObject,
   ClickedMapObjectPayload,
   Coordinate,
-  MapObjectPayload, ParkingRestriction,
+  MapObjectPayload,
+  ParkingRestriction,
   ParkingSpace
 } from '../types';
 import { connect } from 'react-redux';
@@ -15,11 +16,6 @@ import { Dispatch } from "redux";
 import { clickParkingSpace, hoverOnParkingIcon, updateMapViewState } from "../actions";
 import ParkingInfoPanel from "./parking_info_panel";
 import styled from 'styled-components';
-import ParkingUnknownRestrictionIcon from '../assets/round-local_parking-24px_unknown.svg';
-import ParkingLTE15Icon from '../assets/round-local_parking-24px_lte_15.svg';
-import ParkingBTW16AND60Icon from '../assets/round-local_parking-24px_btw_16_and_60.svg';
-import ParkingBTW61AND120Icon from '../assets/round-local_parking-24px_btw_61_and_120.svg';
-import ParkingGTE121Icon from '../assets/round-local_parking-24px_gte_121.svg';
 import CurrentLocationIcon from '../assets/round-trip_origin-24px.svg';
 import ParkingIcon from '../assets/round-local_parking-24px.svg';
 
@@ -33,7 +29,7 @@ const UNKNOWN_COLOUR = [128, 128, 128] as [number, number, number];
 const CURRENT_LOC_COLOUR = [74, 137, 243] as [number, number, number];
 
 type IParkingMapProps = {
-  points: any[] | [];
+  availableParkingSpaces: any[] | [];
   mapStyle?: string;
   currentLocation?: Coordinate;
   clickedMapObject?: ClickedMapObject;
@@ -44,9 +40,16 @@ type IParkingMapProps = {
   hoveringOnParkingIcon: boolean;
 }
 
+const removeLoadingZone = (parkings: ClickedMapObjectPayload[]) => {
+  return parkings.filter(
+    parking => {
+      return !parking.currentRestriction || !parking.currentRestriction.isLoadingZone;
+    });
+};
+
 const processData = (parkingSpaces: ParkingSpace[]): ClickedMapObjectPayload[] => {
   let idx = 0;
-  return parkingSpaces.map((parkingSpace) => {
+  const parkingsToShow = parkingSpaces.map((parkingSpace) => {
     return {
       position: [Number(parkingSpace.coordinate.longitude), Number(parkingSpace.coordinate.latitude)] as [number, number],
       bayId: parkingSpace.id,
@@ -54,6 +57,7 @@ const processData = (parkingSpaces: ParkingSpace[]): ClickedMapObjectPayload[] =
       index: idx++
     }
   });
+  return removeLoadingZone(parkingsToShow);
 };
 
 const renderTooltip = (props: IParkingMapProps) => {
@@ -110,13 +114,12 @@ const buildIconLayer = (id: string, icon: string, data: ClickedMapObjectPayload[
 };
 
 const _renderLayers = (props: IParkingMapProps) => {
-  const {points, currentLocation, onParkingSpaceClicked} = props;
-  const data = processData(points);
+  const {availableParkingSpaces, currentLocation, onParkingSpaceClicked} = props;
   const layers = [
     buildIconLayer(
       'parking-spaces',
       ParkingIcon,
-      data,
+      availableParkingSpaces,
       (info: any) => {
         props.onParkingSpaceClicked(info)
       },
@@ -191,7 +194,7 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
 
 const mapStateToProps = (state: ApplicationState) => {
   return {
-    points: state.parkingSensorData,
+    availableParkingSpaces: processData(state.parkingSensorData),
     mapStyle: state.mapStyle,
     currentLocation: state.currentLocation,
     clickedMapObject: state.clickedMapObject,

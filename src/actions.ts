@@ -19,6 +19,14 @@ const UPDATE_MAP_LOCATION = "UPDATE_MAP_LOCATION";
 const HOVER_ON_PARKING_ICON = "HOVER_ON_PARKING_ICON";
 const TOGGLE_SHOW_LOADING_ZONES_ONLY = "TOGGLE_SHOW_LOADING_ZONES_ONLY";
 const TOGGLE_ACCESSIBLE_MODE = "TOGGLE_ACCESSIBLE_MODE";
+const RESET_CLICKED_MAP_OBJECT = "RESET_CLICKED_MAP_OBJECT";
+
+export const resetClickedMapObject = createAction(
+  RESET_CLICKED_MAP_OBJECT,
+  resolve => {
+    return () => resolve();
+  }
+);
 
 export const toggleShowLoadingZonesOnly = createAction(
   TOGGLE_SHOW_LOADING_ZONES_ONLY,

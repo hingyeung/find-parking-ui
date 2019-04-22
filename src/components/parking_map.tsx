@@ -18,6 +18,7 @@ import { Dispatch } from "redux";
 import {
   clickParkingSpace,
   hoverOnParkingIcon,
+  resetClickedMapObject,
   toggleAccessibleMode,
   toggleShowLoadingZonesOnly,
   updateMapViewState
@@ -61,7 +62,7 @@ const doShowLoadingZonesOnly = (parkings: ClickedMapObjectPayload[], showLoading
     });
 };
 
-const doHandleAccessibleMode = (parkings: ClickedMapObjectPayload[], inAccessibleMode: boolean) => {
+const doHandleAccessibleParkingMode = (parkings: ClickedMapObjectPayload[], inAccessibleMode: boolean) => {
   if (inAccessibleMode) {
     return parkings;
   }
@@ -73,18 +74,27 @@ const doHandleAccessibleMode = (parkings: ClickedMapObjectPayload[], inAccessibl
   )
 };
 
-const processData = (inAccessibleMode: boolean, showLoadingZonesOnly: boolean, parkingSpaces: ParkingSpace[]): ClickedMapObjectPayload[] => {
+const setDisplayDuration = (parkingRestriction: ParkingRestriction | undefined, inAccessibleParkingMode: boolean) => {
+  if (!parkingRestriction) return undefined;
+
+  return Object.assign({}, parkingRestriction, {
+    ...parkingRestriction,
+    displayDuration: inAccessibleParkingMode ? parkingRestriction.disabilityDuration : parkingRestriction.duration
+  })
+};
+
+const processData = (inAccessibleParkingMode: boolean, showLoadingZonesOnly: boolean, parkingSpaces: ParkingSpace[]): ClickedMapObjectPayload[] => {
   let idx = 0;
   let parkingsToShow: ClickedMapObjectPayload[] = parkingSpaces.map((parkingSpace) => {
     return {
       position: [Number(parkingSpace.coordinate.longitude), Number(parkingSpace.coordinate.latitude)] as [number, number],
       bayId: parkingSpace.id,
-      currentRestriction: parkingSpace.currentRestriction,
+      currentRestriction: setDisplayDuration(parkingSpace.currentRestriction, inAccessibleParkingMode),
       index: idx++
     }
   });
 
-  parkingsToShow = doHandleAccessibleMode(parkingsToShow, inAccessibleMode);
+  parkingsToShow = doHandleAccessibleParkingMode(parkingsToShow, inAccessibleParkingMode);
   parkingsToShow = doShowLoadingZonesOnly(parkingsToShow, showLoadingZonesOnly);
   return parkingsToShow;
 };
@@ -100,10 +110,10 @@ const renderTooltip = (props: IParkingMapProps) => {
 const getParkingIconColour = (currentRestriction: ParkingRestriction | undefined) => {
   if (! currentRestriction) { return UNKNOWN_COLOUR; }
 
-  if (currentRestriction.duration <= 15) return LTE_15_COLOUR_COLOUR;
-  if (currentRestriction.duration > 15 && currentRestriction.duration <= 60) return BTW_16_AND_60_COLOUR;
-  if (currentRestriction.duration > 61 && currentRestriction.duration <= 120) return BTW_61_AND_120_COLOUR;
-  if (currentRestriction.duration > 121) return GTE_121_COLOUR;
+  if (currentRestriction.displayDuration <= 15) return LTE_15_COLOUR_COLOUR;
+  if (currentRestriction.displayDuration > 15 && currentRestriction.displayDuration <= 60) return BTW_16_AND_60_COLOUR;
+  if (currentRestriction.displayDuration > 61 && currentRestriction.displayDuration <= 120) return BTW_61_AND_120_COLOUR;
+  if (currentRestriction.displayDuration > 121) return GTE_121_COLOUR;
 
   return UNKNOWN_COLOUR;
 };
@@ -182,7 +192,7 @@ const StyledLocateMeButtonContainer = styled('div')`
   right: 25px;
 `;
 
-const StyledDirectionPanel = styled(ParkingInfoPanel)`
+const StyledParkingInfoPanel = styled(ParkingInfoPanel)`
   position: absolute;
   bottom: 100px;
   left: 5%;
@@ -238,7 +248,7 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
         <StyledLocateMeButtonContainer>
           <LocateMeButton />
         </StyledLocateMeButtonContainer>
-        <StyledDirectionPanel/>
+        <StyledParkingInfoPanel/>
         <AppBar position="fixed" color="primary">
           <Toolbar>
             <StyledIconButton selected={props.showLoadingZonesOnly} onClick={props.toggleShowLoadingZonesOnly}>
@@ -290,6 +300,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     },
     toggleAccessibleMode: () => {
       dispatch(toggleAccessibleMode());
+      dispatch(resetClickedMapObject());
     }
   }
 };

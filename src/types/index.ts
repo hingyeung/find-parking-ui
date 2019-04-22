@@ -40,6 +40,7 @@ export type ParkingRestriction = {
   readonly disabilityDuration: number;
   readonly isMetered: boolean;
   readonly isLoadingZone: boolean;
+  readonly displayDuration: number;
 } & APIResponseParkingRestriction;
 
 export type APIResponseParkingSpace = {

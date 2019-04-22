@@ -45,13 +45,13 @@ const convertHHMMSSToHHMM = (hhmmss: string): string => {
   return hhmmMatched ? hhmmMatched[1] : hhmmss;
 };
 
-const DirectionPanel: React.FunctionComponent<DirectionPanelProps & React.HTMLProps<HTMLDivElement>> = (props) => {
+const ParkingInfoPanel: React.FunctionComponent<DirectionPanelProps & React.HTMLProps<HTMLDivElement>> = (props) => {
   if (! props.clickedMapObject) {
     return <div/>
   }
 
   const duration = currentRestrictionExists(props.clickedMapObject) ?
-    props.clickedMapObject.object.currentRestriction.duration :
+    props.clickedMapObject.object.currentRestriction.displayDuration :
     'Unknown Restriction';
 
   let parkingSignTimeRangeDesc;
@@ -82,4 +82,4 @@ const mapStateToProps = (state: ApplicationState) => {
   }
 };
 
-export default connect(mapStateToProps)(DirectionPanel);
+export default connect(mapStateToProps)(ParkingInfoPanel);

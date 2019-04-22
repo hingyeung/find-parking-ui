@@ -1,5 +1,9 @@
 import {
-  clickParkingSpace, hoverOnParkingIcon, toggleAccessibleMode, toggleShowLoadingZonesOnly,
+  clickParkingSpace,
+  hoverOnParkingIcon,
+  resetClickedMapObject,
+  toggleAccessibleMode,
+  toggleShowLoadingZonesOnly,
   updateAvailableParkings,
   updateCurrentLocation,
   updateMapLocation,
@@ -52,6 +56,8 @@ function findParkingApp(state: ApplicationState = initialState, action: any) {
       return Object.assign({}, state, {showLoadingZonesOnly: !state.showLoadingZonesOnly});
     case getType(toggleAccessibleMode):
       return Object.assign({}, state, {inAccessibleParkingMode: !state.inAccessibleParkingMode});
+    case getType(resetClickedMapObject):
+      return Object.assign({}, state, {clickedMapObject: undefined});
     default:
       console.log('Unknown action', action.type);
       return state;

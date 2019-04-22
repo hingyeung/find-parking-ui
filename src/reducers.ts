@@ -23,7 +23,7 @@ const initialState: ApplicationState = {
   mapStyle: 'mapbox://styles/mapbox/light-v9',
   mapViewState: INITIAL_VIEW_STATE,
   hoveringOnParkingIcon: false,
-  inAccessibleMode: false,
+  inAccessibleParkingMode: false,
   showLoadingZonesOnly: false
 };
 
@@ -51,7 +51,7 @@ function findParkingApp(state: ApplicationState = initialState, action: any) {
     case getType(toggleShowLoadingZonesOnly):
       return Object.assign({}, state, {showLoadingZonesOnly: !state.showLoadingZonesOnly});
     case getType(toggleAccessibleMode):
-      return Object.assign({}, state, {inAccessibleMode: !state.inAccessibleMode});
+      return Object.assign({}, state, {inAccessibleParkingMode: !state.inAccessibleParkingMode});
     default:
       console.log('Unknown action', action.type);
       return state;

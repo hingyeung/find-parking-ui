@@ -47,7 +47,7 @@ type IParkingMapProps = {
   hoverOnParkingIcon: (isHovering: boolean) => void;
   mapViewState: ViewState;
   hoveringOnParkingIcon: boolean;
-  showAccessibleOnly: boolean;
+  inAccessibleParkingMode: boolean;
   showLoadingZonesOnly: boolean;
   toggleShowLoadingZonesOnly: () => void;
   toggleAccessibleMode: () => void;
@@ -194,6 +194,28 @@ const StyledDirectionPanel = styled(ParkingInfoPanel)`
   }
 `;
 
+type StyledLoadingZoneIconProps = {
+  selected: boolean;
+};
+
+const StyledIconButton = styled(IconButton)`
+// https://medium.com/sipios/use-styled-components-with-material-ui-react-e0759f9a15ce
+  && {
+    ${(props: StyledLoadingZoneIconProps) => {
+    console.log(props);
+    if (props.selected) {
+      return `
+        color: white;
+        `
+      } else {
+        return `
+          color: rgba(0, 0, 0, 0.5);
+        `
+      }
+    }}
+  }
+`;
+
 const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
     return (
       <div>
@@ -219,12 +241,12 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
         <StyledDirectionPanel/>
         <AppBar position="fixed" color="primary">
           <Toolbar>
-            <IconButton color="inherit" onClick={props.toggleShowLoadingZonesOnly}>
+            <StyledIconButton selected={props.showLoadingZonesOnly} onClick={props.toggleShowLoadingZonesOnly}>
               <LoadingZoneIcon/>
-            </IconButton>
-            <IconButton color="inherit" onClick={props.toggleAccessibleMode}>
+            </StyledIconButton>
+            <StyledIconButton selected={props.inAccessibleParkingMode} onClick={props.toggleAccessibleMode}>
               <AccessibleIcon/>
-            </IconButton>
+            </StyledIconButton>
           </Toolbar>
         </AppBar>
       </div>
@@ -234,7 +256,7 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
 const mapStateToProps = (state: ApplicationState) => {
   return {
     availableParkingSpaces: processData(
-      state.inAccessibleMode,
+      state.inAccessibleParkingMode,
       state.showLoadingZonesOnly,
       state.parkingSensorData),
     mapStyle: state.mapStyle,
@@ -242,7 +264,7 @@ const mapStateToProps = (state: ApplicationState) => {
     clickedMapObject: state.clickedMapObject,
     mapViewState: state.mapViewState,
     hoveringOnParkingIcon: state.hoveringOnParkingIcon,
-    inAccessibleMode: state.inAccessibleMode,
+    inAccessibleParkingMode: state.inAccessibleParkingMode,
     showLoadingZonesOnly: state.showLoadingZonesOnly
   };
 };

@@ -13,7 +13,7 @@ export type ApplicationState = {
   mapViewState: ViewState;
   hoveringOnParkingIcon: boolean;
   showLoadingZonesOnly: boolean;
-  inAccessibleMode: boolean;
+  inAccessibleParkingMode: boolean;
 }
 
 export type ParkingSpace = {

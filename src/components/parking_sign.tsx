@@ -6,6 +6,7 @@ import MinuteParkingSign from './minute_parking_sign';
 import UnknownRestrictionParkingSign from './unknown_restriction_parking_sign';
 import styled from 'styled-components';
 import ParkingSignTimeRange from './parking_sign_timerange';
+import { LoadingZoneLabel } from './loading_zone_label';
 
 export enum ParkingSignType {
   LOADING_ZONE_SIGN_TYPE = 'LOADING_ZONE_SIGN_TYPE',
@@ -13,17 +14,19 @@ export enum ParkingSignType {
   DISABLED_ONLY_SIGN_TYPE = 'DISABLED_ONLY_SIGN_TYPE'
 }
 
-const LOADING_ZONE_SIGN_PRIMARY_COLOUR = 'red',
-  NORMAL_PARKING_SIGN_PRIMARY_COLOUR = 'green';
+export enum ParkingSignColour {
+  LOADING_ZONE_SIGN_PRIMARY_COLOUR = 'rgb(218, 55, 50)',
+  NORMAL_PARKING_SIGN_PRIMARY_COLOUR = 'green'
+}
 
 const getPrimaryColourForParkingSignType = (parkingSignType?: string) => {
   switch (parkingSignType) {
     case ParkingSignType.LOADING_ZONE_SIGN_TYPE:
-      return LOADING_ZONE_SIGN_PRIMARY_COLOUR;
+      return ParkingSignColour.LOADING_ZONE_SIGN_PRIMARY_COLOUR;
     case ParkingSignType.NORMAL_PARKING_SIGN_TYPE:
-      return NORMAL_PARKING_SIGN_PRIMARY_COLOUR;
+      return ParkingSignColour.NORMAL_PARKING_SIGN_PRIMARY_COLOUR;
     default:
-      return NORMAL_PARKING_SIGN_PRIMARY_COLOUR;
+      return ParkingSignColour.NORMAL_PARKING_SIGN_PRIMARY_COLOUR;
   }
 };
 
@@ -51,6 +54,7 @@ const ParkingSign: React.FunctionComponent<ParkingSignProps> = (props) => {
     return (
       <ParkingSignWrapper className={props.className}>
         <HourParkingSign primaryColour={getPrimaryColourForParkingSignType(props.signType)} hours={props.minutes / 60} />
+        {props.signType === ParkingSignType.LOADING_ZONE_SIGN_TYPE && <LoadingZoneLabel/>}
         <ParkingSignTimeRange timeRangeDesc={props.timeRangeDesc}/>
       </ParkingSignWrapper>
     );
@@ -58,22 +62,15 @@ const ParkingSign: React.FunctionComponent<ParkingSignProps> = (props) => {
     return (
       <ParkingSignWrapper className={props.className}>
         <MinuteParkingSign primaryColour={getPrimaryColourForParkingSignType(props.signType)} minutes={props.minutes} />
+        {props.signType === ParkingSignType.LOADING_ZONE_SIGN_TYPE && <LoadingZoneLabel/>}
         <ParkingSignTimeRange timeRangeDesc={props.timeRangeDesc}/>
       </ParkingSignWrapper>
     );
   }
 };
 
-const StyledParkingSign = styled(ParkingSign)`
-  font-size: 250%;
-  
-  @media (min-width: 420px) {
-    font-size: 300%;
-  }
-`;
-
 const mapStateToProps = (state: ApplicationState) => {
   return {};
 };
 
-export default connect(mapStateToProps)(StyledParkingSign);
+export default connect(mapStateToProps)(ParkingSign);

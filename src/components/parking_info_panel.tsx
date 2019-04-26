@@ -1,7 +1,7 @@
 import React from "react";
 import { ApplicationState, ClickedMapObject, Coordinate, ParkingRestriction } from "../types";
 import { connect } from "react-redux";
-import { Grid, Paper } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 import styled from 'styled-components';
 
 import ParkingSign, { ParkingSignType } from './parking_sign';
@@ -29,10 +29,18 @@ const PaperSC = styled(Paper)`
   @media (min-width: 768px) {
     padding: 15px;
   }
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
 `;
 
-const PanelGrid = styled(Grid)`
-  min-height: 4.5rem;
+const LeftPanel = styled('div')`
+  flex-grow: 1;
+  flex-basis: 25%
+`;
+
+const RightPanel = styled('div')`
+  flex-grow: 2;
   text-align: center;
 `;
 
@@ -70,14 +78,14 @@ const ParkingInfoPanel: React.FunctionComponent<DirectionPanelProps & React.HTML
 
   return (
     <PaperSC className={props.className}>
-        <PanelGrid container justify="space-between" alignItems="center">
-          <Grid container item xs={4} direction="column" justify="center" alignItems="center">
-            <ParkingSign signType={signType} minutes={duration} timeRangeDesc={parkingSignTimeRangeDesc}/>
-          </Grid>
-          <Grid item xs={8} justify="center">
-            {props.originCoordinate && props.clickedMapObject && buildDirectionButton(props.originCoordinate, props.clickedMapObject)}
-          </Grid>
-        </PanelGrid>
+        <LeftPanel>
+          <ParkingSign signType={signType} minutes={duration} timeRangeDesc={parkingSignTimeRangeDesc}/>
+        </LeftPanel>
+        <RightPanel>
+          {props.originCoordinate &&
+            props.clickedMapObject &&
+            buildDirectionButton(props.originCoordinate, props.clickedMapObject)}
+        </RightPanel>
     </PaperSC>
   )
 };

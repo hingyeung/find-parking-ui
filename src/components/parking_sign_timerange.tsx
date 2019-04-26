@@ -6,7 +6,7 @@ type ParkingSignTimeRangeProps = {
 };
 
 const StyledParkingSignTimeRange = styled('div')`
-  font-size: 25%;
+  font-size: 0.8rem;
 `;
 
 const ParkingSignTimeRange: React.FunctionComponent<ParkingSignTimeRangeProps> = props => {

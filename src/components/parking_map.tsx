@@ -57,8 +57,9 @@ type IParkingMapProps = {
 const doShowLoadingZonesOnly = (parkings: ClickedMapObjectPayload[], showLoadingZonesOnly: boolean) => {
   return parkings.filter(
     parking => {
-      return !parking.currentRestriction ||
-        (showLoadingZonesOnly ? parking.currentRestriction.isLoadingZone : !parking.currentRestriction.isLoadingZone);
+      return showLoadingZonesOnly ?
+        parking.currentRestriction && parking.currentRestriction.isLoadingZone :
+        !parking.currentRestriction || !parking.currentRestriction.isLoadingZone;
     });
 };
 

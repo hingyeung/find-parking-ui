@@ -16,6 +16,11 @@ const HourParkingSign: React.FunctionComponent<HourParkingSignProps> = (props) =
 const StyledHourParkingSign = styled(HourParkingSign)`
   color: ${(props) => props.primaryColour};
   font-weight: bold;
+  font-size: 3rem;
+  
+  @media (min-width: 420px) {
+    font-size: 4rem;
+  }
 `;
 
 export default StyledHourParkingSign;

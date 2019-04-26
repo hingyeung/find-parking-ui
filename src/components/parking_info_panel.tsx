@@ -1,10 +1,10 @@
 import React from "react";
-import { ApplicationState, ClickedMapObject, Coordinate } from "../types";
+import { ApplicationState, ClickedMapObject, Coordinate, ParkingRestriction } from "../types";
 import { connect } from "react-redux";
 import { Grid, Paper } from '@material-ui/core';
 import styled from 'styled-components';
 
-import ParkingSign from './parking_sign';
+import ParkingSign, { ParkingSignType } from './parking_sign';
 import DirectionButton from './direction_button';
 
 type DirectionPanelProps = {
@@ -45,27 +45,34 @@ const convertHHMMSSToHHMM = (hhmmss: string): string => {
   return hhmmMatched ? hhmmMatched[1] : hhmmss;
 };
 
+const getSignType = (parkingRestriction: ParkingRestriction) => {
+  if (parkingRestriction.isDisabledOnly) return ParkingSignType.DISABLED_ONLY_SIGN_TYPE;
+  if (parkingRestriction.isLoadingZone) return ParkingSignType.LOADING_ZONE_SIGN_TYPE;
+
+  return ParkingSignType.NORMAL_PARKING_SIGN_TYPE;
+};
+
 const ParkingInfoPanel: React.FunctionComponent<DirectionPanelProps & React.HTMLProps<HTMLDivElement>> = (props) => {
   if (! props.clickedMapObject) {
     return <div/>
   }
 
-  const duration = currentRestrictionExists(props.clickedMapObject) ?
-    props.clickedMapObject.object.currentRestriction.displayDuration :
-    'Unknown Restriction';
-
-  let parkingSignTimeRangeDesc;
+  let duration, signType, parkingSignTimeRangeDesc;
   if (currentRestrictionExists(props.clickedMapObject)) {
     const startTimeInHHMM = convertHHMMSSToHHMM(props.clickedMapObject.object.currentRestriction.startTime);
     const endTimeInHHMM = convertHHMMSSToHHMM(props.clickedMapObject.object.currentRestriction.endTime);
     parkingSignTimeRangeDesc = `${startTimeInHHMM} - ${endTimeInHHMM}`;
+    duration = props.clickedMapObject.object.currentRestriction.displayDuration;
+    signType = getSignType(props.clickedMapObject.object.currentRestriction);
+  } else {
+    duration = 'Unknown Restriction';
   }
 
   return (
     <PaperSC className={props.className}>
         <PanelGrid container justify="space-between" alignItems="center">
           <Grid container item xs={4} direction="column" justify="center" alignItems="center">
-            <ParkingSign minutes={duration} timeRangeDesc={parkingSignTimeRangeDesc}/>
+            <ParkingSign signType={signType} minutes={duration} timeRangeDesc={parkingSignTimeRangeDesc}/>
           </Grid>
           <Grid item xs={8} justify="center">
             {props.originCoordinate && props.clickedMapObject && buildDirectionButton(props.originCoordinate, props.clickedMapObject)}

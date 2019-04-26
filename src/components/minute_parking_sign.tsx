@@ -4,6 +4,7 @@ import styled from 'styled-components';
 type MinuteParkingSignProps = {
   minutes: number;
   className?: string;
+  primaryColour?: string;
 }
 
 const StyledMinuteLabel = styled('span')`
@@ -13,12 +14,12 @@ const StyledMinuteLabel = styled('span')`
 
 const MinuteParkingSign: React.FunctionComponent<MinuteParkingSignProps> = props => {
   return (
-    <div className={props.className}>{Math.trunc(props.minutes)}<StyledMinuteLabel>minute</StyledMinuteLabel></div>
+    <div className={props.className}>{Math.trunc(props.minutes)}<StyledMinuteLabel>minutes</StyledMinuteLabel></div>
   )
 };
 
 const StyledMinuteParkingSign = styled(MinuteParkingSign)`
-  color: green;
+  color: ${(props) => props.primaryColour};
   font-weight: bold;
 `;
 

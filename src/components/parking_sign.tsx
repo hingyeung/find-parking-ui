@@ -7,17 +7,38 @@ import UnknownRestrictionParkingSign from './unknown_restriction_parking_sign';
 import styled from 'styled-components';
 import ParkingSignTimeRange from './parking_sign_timerange';
 
-type ParkingSignType = {
+export enum ParkingSignType {
+  LOADING_ZONE_SIGN_TYPE = 'LOADING_ZONE_SIGN_TYPE',
+  NORMAL_PARKING_SIGN_TYPE = 'NORMAL_PARKING_SIGN_TYPE',
+  DISABLED_ONLY_SIGN_TYPE = 'DISABLED_ONLY_SIGN_TYPE'
+}
+
+const LOADING_ZONE_SIGN_PRIMARY_COLOUR = 'red',
+  NORMAL_PARKING_SIGN_PRIMARY_COLOUR = 'green';
+
+const getPrimaryColourForParkingSignType = (parkingSignType?: string) => {
+  switch (parkingSignType) {
+    case ParkingSignType.LOADING_ZONE_SIGN_TYPE:
+      return LOADING_ZONE_SIGN_PRIMARY_COLOUR;
+    case ParkingSignType.NORMAL_PARKING_SIGN_TYPE:
+      return NORMAL_PARKING_SIGN_PRIMARY_COLOUR;
+    default:
+      return NORMAL_PARKING_SIGN_PRIMARY_COLOUR;
+  }
+};
+
+type ParkingSignProps = {
   minutes: number | string;
   className?: string;
   timeRangeDesc?: string;
+  signType?: string;
 };
 
 const ParkingSignWrapper = styled('div')`
   text-align: center;
 `;
 
-const ParkingSign: React.FunctionComponent<ParkingSignType> = (props) => {
+const ParkingSign: React.FunctionComponent<ParkingSignProps> = (props) => {
   if (!props.minutes || typeof props.minutes === 'string') {
     return (
       <ParkingSignWrapper className={props.className}>
@@ -29,14 +50,14 @@ const ParkingSign: React.FunctionComponent<ParkingSignType> = (props) => {
   if ((props.minutes % 60) == 0) {
     return (
       <ParkingSignWrapper className={props.className}>
-        <HourParkingSign hours={props.minutes / 60} />
+        <HourParkingSign primaryColour={getPrimaryColourForParkingSignType(props.signType)} hours={props.minutes / 60} />
         <ParkingSignTimeRange timeRangeDesc={props.timeRangeDesc}/>
       </ParkingSignWrapper>
     );
   } else {
     return (
       <ParkingSignWrapper className={props.className}>
-        <MinuteParkingSign minutes={props.minutes} />
+        <MinuteParkingSign primaryColour={getPrimaryColourForParkingSignType(props.signType)} minutes={props.minutes} />
         <ParkingSignTimeRange timeRangeDesc={props.timeRangeDesc}/>
       </ParkingSignWrapper>
     );

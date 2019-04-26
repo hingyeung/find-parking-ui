@@ -4,6 +4,7 @@ import styled from 'styled-components';
 type HourParkingSignProps = {
   hours: number;
   className?: string;
+  primaryColour?: string;
 };
 
 const HourParkingSign: React.FunctionComponent<HourParkingSignProps> = (props) => {
@@ -13,7 +14,7 @@ const HourParkingSign: React.FunctionComponent<HourParkingSignProps> = (props) =
 };
 
 const StyledHourParkingSign = styled(HourParkingSign)`
-  color: green;
+  color: ${(props) => props.primaryColour};
   font-weight: bold;
 `;
 

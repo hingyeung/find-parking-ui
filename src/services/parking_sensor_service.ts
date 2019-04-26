@@ -1,6 +1,6 @@
 import { APIResponseParkingRestriction, APIResponseParkingSpace, Coordinate, ParkingSpace } from "../types";
 import { AxiosError, AxiosResponse } from "axios";
-import convertToParkingRestriction from '../helper/parse_parking_restriction_description';
+import parseParkingRestrictionDescription from '../helper/parse_parking_restriction_description';
 
 const axios = require('axios');
 
@@ -47,7 +47,7 @@ const getCurrentParkingRestriction = (parkingRestrictions: APIResponseParkingRes
   });
 
   return remainingRestrictions.length === 1 ?
-    convertToParkingRestriction(remainingRestrictions[0]) :
+    parseParkingRestrictionDescription(remainingRestrictions[0]) :
     undefined;
 };
 

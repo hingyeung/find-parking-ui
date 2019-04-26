@@ -9,7 +9,8 @@ const parseParkingRestrictionDescription = (parkingRestrictionFromApiResponse: A
         parkingRestrictionFromApiResponse.duration,
       isMetered: parkingRestrictionFromApiResponse.typeDesc.match(/\bMeter\b/) !== null,
       isDisabledOnly: parkingRestrictionFromApiResponse.typeDesc.match(/\bDisabled Only\b/) !== null,
-      isLoadingZone: parkingRestrictionFromApiResponse.typeDesc.match(/\bLoading Zone\b/) !== null
+      isLoadingZone: parkingRestrictionFromApiResponse.typeDesc.match(/\bLoading Zone\b/) !== null,
+      displayDuration: parkingRestrictionFromApiResponse.duration
     })
 };
 

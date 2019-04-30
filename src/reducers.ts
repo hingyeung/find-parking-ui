@@ -1,5 +1,5 @@
 import {
-  clickParkingSpace,
+  clickParkingSpace, closePopupAlert,
   hoverOnParkingIcon,
   resetClickedMapObject,
   toggleAccessibleMode,
@@ -28,7 +28,8 @@ const initialState: ApplicationState = {
   mapViewState: INITIAL_VIEW_STATE,
   hoveringOnParkingIcon: false,
   inAccessibleParkingMode: false,
-  showLoadingZonesOnly: false
+  showLoadingZonesOnly: false,
+  showPopupAlert: true
 };
 
 function findParkingApp(state: ApplicationState = initialState, action: any) {
@@ -58,6 +59,8 @@ function findParkingApp(state: ApplicationState = initialState, action: any) {
       return Object.assign({}, state, {inAccessibleParkingMode: !state.inAccessibleParkingMode});
     case getType(resetClickedMapObject):
       return Object.assign({}, state, {clickedMapObject: undefined});
+    case getType(closePopupAlert):
+      return Object.assign({}, state, {showPopupAlert: false});
     default:
       console.log('Unknown action', action.type);
       return state;

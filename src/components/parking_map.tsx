@@ -27,7 +27,8 @@ import ParkingInfoPanel from "./parking_info_panel";
 import styled from 'styled-components';
 import CurrentLocationIcon from '../assets/round-trip_origin-24px.svg';
 import ParkingIcon from '../assets/round-local_parking-24px.svg';
-import { AppBar, IconButton, Toolbar } from '@material-ui/core';
+import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core';
+import PopupAlert from './popup_alert';
 
 // Set your mapbox token here
 const MAPBOX_TOKEN = process.env.REACT_APP_MapboxAccessToken;
@@ -235,9 +236,21 @@ const StyledIconButton = styled(IconButton)`
   }
 `;
 
+const StyledTitleWrapper = styled('div')`
+  flex-grow: 1;
+`;
+
+const StyledToolbar = styled(Toolbar)`
+  padding-top: 10px;
+  padding-bottom: 10px;
+`;
+
 const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
     return (
       <div>
+        <PopupAlert title={'Attention'}>
+          Please note that as of 01/04/2019 we are not receiving the data feed from the sensors as expected. We are working on a resolution and will update this note as more information is made available.
+        </PopupAlert>
         <div id="parking-map-wrapper">
           <DeckGL
             onViewStateChange={props.onMapViewStateChange}
@@ -259,14 +272,22 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
         </StyledLocateMeButtonContainer>
         <StyledParkingInfoPanel inAccessibleParkingMode={props.inAccessibleParkingMode}/>
         <AppBar position="fixed" color="primary">
-          <Toolbar>
-            <StyledIconButton selected={props.showLoadingZonesOnly} onClick={props.toggleShowLoadingZonesOnly}>
-              <LoadingZoneIcon/>
-            </StyledIconButton>
+          <StyledToolbar>
+            <StyledTitleWrapper>
+              <Typography component="h1" variant="h5" color="inherit">
+                CBD Parking Finder
+              </Typography>
+              <Typography component="h2" variant="subtitle2" color="inherit">
+                Find available parking spaces in Melbourne CBD
+              </Typography>
+            </StyledTitleWrapper>
             <StyledIconButton selected={props.inAccessibleParkingMode} onClick={props.toggleAccessibleMode}>
               <AccessibleIcon/>
             </StyledIconButton>
-          </Toolbar>
+            <StyledIconButton selected={props.showLoadingZonesOnly} onClick={props.toggleShowLoadingZonesOnly}>
+              <LoadingZoneIcon/>
+            </StyledIconButton>
+          </StyledToolbar>
         </AppBar>
       </div>
     )

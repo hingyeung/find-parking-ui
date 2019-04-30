@@ -9,7 +9,8 @@ import DirectionButton from './direction_button';
 
 type DirectionPanelProps = {
   clickedMapObject?: ClickedMapObject,
-  originCoordinate?: Coordinate
+  originCoordinate?: Coordinate,
+  inAccessibleParkingMode: boolean
 };
 
 const buildDirectionButton = (originCoordinate: Coordinate, clickedMapObject: ClickedMapObject) => {
@@ -53,9 +54,12 @@ const convertHHMMSSToHHMM = (hhmmss: string): string => {
   return hhmmMatched ? hhmmMatched[1] : hhmmss;
 };
 
-const getSignType = (parkingRestriction: ParkingRestriction) => {
-  if (parkingRestriction.isDisabledOnly) return ParkingSignType.DISABLED_ONLY_SIGN_TYPE;
-  if (parkingRestriction.isLoadingZone) return ParkingSignType.LOADING_ZONE_SIGN_TYPE;
+const getSignType = (parkingRestriction: ParkingRestriction, inAccessibleParkingMode: boolean) => {
+  if (parkingRestriction.isDisabledOnly ||
+    (inAccessibleParkingMode && parkingRestriction.duration !== parkingRestriction.disabilityDuration)) {
+    return ParkingSignType.DISABLED_ONLY_SIGN_TYPE;
+  }
+  if (parkingRestriction.isLoadingZone) { return ParkingSignType.LOADING_ZONE_SIGN_TYPE; }
 
   return ParkingSignType.NORMAL_PARKING_SIGN_TYPE;
 };
@@ -71,7 +75,7 @@ const ParkingInfoPanel: React.FunctionComponent<DirectionPanelProps & React.HTML
     const endTimeInHHMM = convertHHMMSSToHHMM(props.clickedMapObject.object.currentRestriction.endTime);
     parkingSignTimeRangeDesc = `${startTimeInHHMM} - ${endTimeInHHMM}`;
     duration = props.clickedMapObject.object.currentRestriction.displayDuration;
-    signType = getSignType(props.clickedMapObject.object.currentRestriction);
+    signType = getSignType(props.clickedMapObject.object.currentRestriction, props.inAccessibleParkingMode);
   } else {
     duration = 'Unknown Restriction';
   }

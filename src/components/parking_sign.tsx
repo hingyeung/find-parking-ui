@@ -7,6 +7,7 @@ import UnknownRestrictionParkingSign from './unknown_restriction_parking_sign';
 import styled from 'styled-components';
 import ParkingSignTimeRange from './parking_sign_timerange';
 import { LoadingZoneLabel } from './loading_zone_label';
+import { DisabledParkingLabel } from './disabled_parking_label';
 
 export enum ParkingSignType {
   LOADING_ZONE_SIGN_TYPE = 'LOADING_ZONE_SIGN_TYPE',
@@ -55,6 +56,7 @@ const ParkingSign: React.FunctionComponent<ParkingSignProps> = (props) => {
       <ParkingSignWrapper className={props.className}>
         <HourParkingSign primaryColour={getPrimaryColourForParkingSignType(props.signType)} hours={props.minutes / 60} />
         {props.signType === ParkingSignType.LOADING_ZONE_SIGN_TYPE && <LoadingZoneLabel/>}
+        {props.signType === ParkingSignType.DISABLED_ONLY_SIGN_TYPE && <DisabledParkingLabel/>}
         <ParkingSignTimeRange timeRangeDesc={props.timeRangeDesc}/>
       </ParkingSignWrapper>
     );
@@ -63,6 +65,7 @@ const ParkingSign: React.FunctionComponent<ParkingSignProps> = (props) => {
       <ParkingSignWrapper className={props.className}>
         <MinuteParkingSign primaryColour={getPrimaryColourForParkingSignType(props.signType)} minutes={props.minutes} />
         {props.signType === ParkingSignType.LOADING_ZONE_SIGN_TYPE && <LoadingZoneLabel/>}
+        {props.signType === ParkingSignType.DISABLED_ONLY_SIGN_TYPE && <DisabledParkingLabel/>}
         <ParkingSignTimeRange timeRangeDesc={props.timeRangeDesc}/>
       </ParkingSignWrapper>
     );

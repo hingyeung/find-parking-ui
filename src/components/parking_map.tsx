@@ -200,15 +200,15 @@ const StyledParkingInfoPanel = styled(ParkingInfoPanel)`
   left: 5%;
   right: 5%;
   width: 80%;
-  
+
   @media (min-width: 420px) and (max-width: 768px) {
     width: 45%;
   }
-  
+
   @media (min-width: 769px) {
     width: 30%;
   }
-  
+
   @media (min-height: 415px) {
     bottom: 100px;
   }
@@ -245,6 +245,15 @@ const StyledToolbar = styled(Toolbar)`
   padding-bottom: 10px;
 `;
 
+const StyledSubtitle = styled(Typography)`
+  && {
+    display: none;
+    @media (min-width: 415px) {
+      display: block;
+    }
+  }
+`;
+
 const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
     return (
       <div>
@@ -277,9 +286,9 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
               <Typography component="h1" variant="h5" color="inherit">
                 CBD Parking Finder
               </Typography>
-              <Typography component="h2" variant="subtitle2" color="inherit">
+              <StyledSubtitle component="h2" variant="subtitle2" color="inherit">
                 Find available parking spaces in Melbourne CBD
-              </Typography>
+              </StyledSubtitle>
             </StyledTitleWrapper>
             <StyledIconButton selected={props.inAccessibleParkingMode} onClick={props.toggleAccessibleMode}>
               <AccessibleIcon/>

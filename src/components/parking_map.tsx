@@ -27,7 +27,7 @@ import ParkingInfoPanel from "./parking_info_panel";
 import styled from 'styled-components';
 import CurrentLocationIcon from '../assets/round-trip_origin-24px.svg';
 import ParkingIcon from '../assets/round-local_parking-24px.svg';
-import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Hidden, IconButton, Toolbar, Typography } from '@material-ui/core';
 import PopupAlert from './popup_alert';
 
 // Set your mapbox token here
@@ -277,8 +277,8 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
               <Typography component="h1" variant="h5" color="inherit">
                 CBD Parking Finder
               </Typography>
-              <Typography component="h2" variant="subtitle2" color="inherit" display={{ xs: 'block', sm: 'none' }}>
-                Find available parking spaces in Melbourne CBD
+              <Typography component="h2" variant="subtitle2" color="inherit">
+                <Hidden xsDown>Find available parking spaces in Melbourne CBD</Hidden>
               </Typography>
             </StyledTitleWrapper>
             <StyledIconButton selected={props.inAccessibleParkingMode} onClick={props.toggleAccessibleMode}>

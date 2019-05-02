@@ -245,20 +245,11 @@ const StyledToolbar = styled(Toolbar)`
   padding-bottom: 10px;
 `;
 
-const StyledSubtitle = styled(Typography)`
-  && {
-    display: none;
-    @media (min-width: 415px) {
-      display: block;
-    }
-  }
-`;
-
 const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
     return (
       <div>
         <PopupAlert title={'Attention'}>
-          Please note that as of 01/04/2019 we are not receiving the data feed from the sensors as expected. We are working on a resolution and will update this note as more information is made available.
+          Please note that Parking Sensors are not operational on Public Holidays. Parking Sensors will show car parks as vacant when blocked by construction zones.
         </PopupAlert>
         <div id="parking-map-wrapper">
           <DeckGL
@@ -286,9 +277,9 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
               <Typography component="h1" variant="h5" color="inherit">
                 CBD Parking Finder
               </Typography>
-              <StyledSubtitle component="h2" variant="subtitle2" color="inherit">
+              <Typography component="h2" variant="subtitle2" color="inherit" display={{ xs: 'block', sm: 'none' }}>
                 Find available parking spaces in Melbourne CBD
-              </StyledSubtitle>
+              </Typography>
             </StyledTitleWrapper>
             <StyledIconButton selected={props.inAccessibleParkingMode} onClick={props.toggleAccessibleMode}>
               <AccessibleIcon/>

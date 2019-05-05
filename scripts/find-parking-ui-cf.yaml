@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Creates an S3 bucket configured for hosting a static website, and a Route
   53 DNS record pointing to the bucket
 Parameters:
-  DomainName:
+  HostedZoneName:
     Type: String
     Description: The DNS name of an existing Amazon Route 53 hosted zone e.g. jevsejev.io
     AllowedPattern: (?!-)[a-zA-Z0-9-.]{1,63}(?<!-)
@@ -92,7 +92,7 @@ Resources:
   WebsiteDNSName:
     Type: AWS::Route53::RecordSetGroup
     Properties:
-      HostedZoneName: !Join ['', [!Ref 'DomainName', .]]
+      HostedZoneName: !Join ['', [!Ref 'HostedZoneName', .]]
       RecordSets:
       - Name: !Ref 'FullDomainName'
         Type: A

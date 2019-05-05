@@ -1,3 +1,9 @@
+h1. Melbourne City On-street Parking Finder
+
+This is a web app that helps you find available on-street parking in Melbourne CBD. The real-time parking sensor data is provided by [City of Melbourne's Open Data Platform](https://data.melbourne.vic.gov.au/Transport-Movement/On-street-Parking-Bay-Sensors/vh2v-4nfs).
+
+This React web app is designed to work with a serverless, Node.js [backend](). All deployment-related scripts are designed to work with Amazon Web Services.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -12,11 +18,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
 ### `npm run build`
 
 Builds the app for production to the `build` folder.<br>
@@ -27,18 +28,17 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+### `npm run deploy -- <s3_bucket_name>`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Deploys artefacts from `dist` directory to the nominated S3 bucket. This command is useful if you host this web app using [S3 static website hosting](https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html). This command is usually used after `npm run build` to ensure production version of the app is deployed.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### `npm init_infrastructure -- <HOSTED_ZONE> <FQDN> <ACM_CERT_ARN>`
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  e.g. `npm run init_infrastructure -- example.com app.example.com arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012`
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Performs the initial infrastructure setup in AWS. This is the high level outlines of what it does:
+1. creates a S3 bucket using `FQDN` as bucket name and enabled static website hosting.
+1. deploys a CloudFront distribution with the provided certificate hosted in ACM (`ACM_CERT_ARN`) and points the CloudFront distribute the S3 bucket created in the previous step.
+1. in Route53, setup a DNS A record alias in `HOSTED_ZONE` hosted zone and points it to the CloudFront distribution created in the previous step.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+See [find-parking-ui-cf.yaml](scripts/find-parking-ui-cf.yaml) for more details.

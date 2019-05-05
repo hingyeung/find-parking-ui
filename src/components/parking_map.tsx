@@ -27,8 +27,9 @@ import ParkingInfoPanel from "./parking_info_panel";
 import styled from 'styled-components';
 import CurrentLocationIcon from '../assets/round-trip_origin-24px.svg';
 import ParkingIcon from '../assets/round-local_parking-24px.svg';
-import { AppBar, Hidden, IconButton, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Hidden, IconButton, SvgIcon, Toolbar, Typography } from '@material-ui/core';
 import PopupAlert from './popup_alert';
+import { GithubIcon } from './svg_icons';
 
 // Set your mapbox token here
 const MAPBOX_TOKEN = process.env.REACT_APP_MapboxAccessToken;
@@ -214,15 +215,14 @@ const StyledParkingInfoPanel = styled(ParkingInfoPanel)`
   }
 `;
 
-type StyledLoadingZoneIconProps = {
+type StyledIconButtonProps = {
   selected: boolean;
 };
 
 const StyledIconButton = styled(IconButton)`
 // https://medium.com/sipios/use-styled-components-with-material-ui-react-e0759f9a15ce
   && {
-    ${(props: StyledLoadingZoneIconProps) => {
-    console.log(props);
+    ${(props: StyledIconButtonProps) => {
     if (props.selected) {
       return `
         color: white;
@@ -286,6 +286,9 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
             </StyledIconButton>
             <StyledIconButton selected={props.showLoadingZonesOnly} onClick={props.toggleShowLoadingZonesOnly}>
               <LoadingZoneIcon/>
+            </StyledIconButton>
+            <StyledIconButton selected={false}>
+              <GithubIcon/>
             </StyledIconButton>
           </StyledToolbar>
         </AppBar>

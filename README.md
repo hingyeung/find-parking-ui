@@ -1,4 +1,4 @@
-h1. Melbourne City On-street Parking Finder
+##  Melbourne City On-street Parking Finder
 
 This is a web app that helps you find available on-street parking in Melbourne CBD. The real-time parking sensor data is provided by [City of Melbourne's Open Data Platform](https://data.melbourne.vic.gov.au/Transport-Movement/On-street-Parking-Bay-Sensors/vh2v-4nfs).
 

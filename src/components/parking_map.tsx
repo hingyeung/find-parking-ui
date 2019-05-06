@@ -25,20 +25,66 @@ import {
 } from "../actions";
 import ParkingInfoPanel from "./parking_info_panel";
 import styled from 'styled-components';
-import CurrentLocationIcon from '../assets/round-trip_origin-24px.svg';
-import ParkingIcon from '../assets/round-local_parking-24px.svg';
+import ParkingIconAtlas from '../assets/parking_icon_sprites.png';
 import { AppBar, Hidden, IconButton, SvgIcon, Toolbar, Typography } from '@material-ui/core';
 import PopupAlert from './popup_alert';
 import { GithubIcon } from './svg_icons';
 
 // Set your mapbox token here
 const MAPBOX_TOKEN = process.env.REACT_APP_MapboxAccessToken;
-const LTE_15_COLOUR_COLOUR = [230, 25, 75] as [number, number, number];
-const BTW_16_AND_60_COLOUR = [245, 130, 48] as [number, number, number];
-const BTW_61_AND_120_COLOUR = [240, 50, 230] as [number, number, number];
-const GTE_121_COLOUR = [60, 180, 75] as [number, number, number];
-const UNKNOWN_COLOUR = [128, 128, 128] as [number, number, number];
-const CURRENT_LOC_COLOUR = [86, 131, 255] as [number, number, number];
+const UNKNOWN_RESTRICTION_PARKING_ICON = 'unknown',
+  LTE_15_PARKING_ICON = 'lte_15',
+  BTW_16_AND_60_PARKING_ICON = 'btw_16_60',
+  BTW_61_AND_120_PARKING_ICON = 'btw_61_120',
+  GTE_121_PARKING_ICON = 'gte_121',
+  CURRENT_LOCATION_ICON = 'current_loc';
+const PARKING_ICON_MAPPING = {
+  [BTW_16_AND_60_PARKING_ICON]: {
+    x: 0,
+    y: 0,
+    width: 24,
+    height: 24,
+    // whether icon is treated as a transparency mask.
+    // If true, user defined color is applied.
+    // If false, original color from the image is applied.
+    mask: false
+  },
+  [BTW_61_AND_120_PARKING_ICON]: {
+    x: 24,
+    y: 0,
+    width: 24,
+    height: 24,
+    mask: false
+  },
+  [GTE_121_PARKING_ICON]: {
+    x: 48,
+    y: 0,
+    width: 24,
+    height: 24,
+    mask: false
+  },
+  [LTE_15_PARKING_ICON]: {
+    x: 72,
+    y: 0,
+    width: 24,
+    height: 24,
+    mask: false
+  },
+  [CURRENT_LOCATION_ICON]: {
+    x: 96,
+    y: 0,
+    width: 24,
+    height: 24,
+    mask: false
+  },
+  [UNKNOWN_RESTRICTION_PARKING_ICON]: {
+    x: 120,
+    y: 0,
+    width: 24,
+    height: 24,
+    mask: false
+  }
+};
 
 type IParkingMapProps = {
   availableParkingSpaces: any[] | [];
@@ -110,45 +156,30 @@ const renderTooltip = (props: IParkingMapProps) => {
   )
 };
 
-const getParkingIconColour = (currentRestriction: ParkingRestriction | undefined) => {
-  if (! currentRestriction) { return UNKNOWN_COLOUR; }
+const getParkingIcon = (currentRestriction: ParkingRestriction | undefined) => {
+  if (! currentRestriction) { return UNKNOWN_RESTRICTION_PARKING_ICON; }
 
-  if (currentRestriction.displayDuration <= 15) return LTE_15_COLOUR_COLOUR;
-  if (currentRestriction.displayDuration > 15 && currentRestriction.displayDuration <= 60) return BTW_16_AND_60_COLOUR;
-  if (currentRestriction.displayDuration > 61 && currentRestriction.displayDuration <= 120) return BTW_61_AND_120_COLOUR;
-  if (currentRestriction.displayDuration > 121) return GTE_121_COLOUR;
-
-  return UNKNOWN_COLOUR;
+  if (currentRestriction.displayDuration <= 15) return LTE_15_PARKING_ICON;
+  if (currentRestriction.displayDuration > 15 && currentRestriction.displayDuration <= 60) return BTW_16_AND_60_PARKING_ICON;
+  if (currentRestriction.displayDuration > 61 && currentRestriction.displayDuration <= 120) return BTW_61_AND_120_PARKING_ICON;
+  if (currentRestriction.displayDuration > 121) return GTE_121_PARKING_ICON;
 };
 
-const buildIconLayer = (id: string, icon: string, data: ClickedMapObjectPayload[] | MapObjectPayload[], onClickFn: Function, onHoverOnParkingIconFn: Function, getColorFn: Function | undefined) => {
+const buildIconLayer = (id: string, icon: string, data: ClickedMapObjectPayload[] | MapObjectPayload[], onClickFn: Function, onHoverOnParkingIconFn: Function, getIcon: Function | undefined) => {
   return new IconLayer({
     id: id,
     getPosition: (d: any) => d.position,
     getRadius: (d: any) => 6,
     radiusMinPixels: 4,
     radiusMaxPixels: 10,
-    opacity: 0.8,
     pickable: true,
     onClick: onClickFn,
     autoHighlight: true,
     // undefined info.object indicates hover-off
     onHover: (info: any, event: any) => {onHoverOnParkingIconFn(info.object !== undefined);},
     iconAtlas: icon,
-    iconMapping: {
-      marker: {
-        x: 0,
-        y: 0,
-        width: 24,
-        height: 24,
-        // whether icon is treated as a transparency mask.
-        // If true, user defined color is applied.
-        // If false, original color from the image is applied.
-        mask: true
-      }
-    },
-    getColor: getColorFn || ((d: ClickedMapObjectPayload) => getParkingIconColour(d.currentRestriction)),
-    getIcon: (d: ClickedMapObjectPayload) => 'marker',
+    iconMapping: PARKING_ICON_MAPPING,
+    getIcon,
     getSize: (d: ClickedMapObjectPayload) => 30,
     sizeScale: 1,
     data
@@ -160,13 +191,13 @@ const _renderLayers = (props: IParkingMapProps) => {
   const layers = [
     buildIconLayer(
       'parking-spaces',
-      ParkingIcon,
+      ParkingIconAtlas,
       availableParkingSpaces,
       (info: any) => {
         props.onParkingSpaceClicked(info)
       },
       props.hoverOnParkingIcon,
-      undefined
+      (d: ClickedMapObjectPayload) => getParkingIcon(d.currentRestriction)
     )
   ];
 
@@ -174,7 +205,7 @@ const _renderLayers = (props: IParkingMapProps) => {
     layers.push(
       buildIconLayer(
         'current-location',
-        CurrentLocationIcon,
+        ParkingIconAtlas,
         [{
           position: [currentLocation.longitude, currentLocation.latitude]
         }],
@@ -182,7 +213,7 @@ const _renderLayers = (props: IParkingMapProps) => {
           props.onParkingSpaceClicked(info)
         },
         () => {},
-        () => CURRENT_LOC_COLOUR
+        (d: ClickedMapObjectPayload) => CURRENT_LOCATION_ICON
       )
     )
   }

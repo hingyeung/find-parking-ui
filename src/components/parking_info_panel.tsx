@@ -30,9 +30,6 @@ const PaperSC = styled(Paper)`
   @media (min-width: 768px) {
     padding: 15px;
   }
-  // display: flex;
-  // flex-wrap: nowrap;
-  // align-items: center;
 `;
 
 const Title = styled('div')`

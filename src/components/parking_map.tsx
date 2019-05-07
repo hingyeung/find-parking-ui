@@ -106,14 +106,6 @@ const processData = (inAccessibleParkingMode: boolean, showLoadingZonesOnly: boo
   return parkingsToShow;
 };
 
-const renderTooltip = (props: IParkingMapProps) => {
-  return props.clickedMapObject && (
-    <div className="toolTip" style={{position: 'absolute', zIndex: 1, pointerEvents: 'none', left: props.clickedMapObject.pointerX, top: props.clickedMapObject.pointerY}}>
-      {props.clickedMapObject.object.bayId}
-    </div>
-  )
-};
-
 const getParkingIcon = (currentRestriction: ParkingRestriction | undefined) => {
   if (! currentRestriction) { return UNKNOWN_RESTRICTION_PARKING_ICON; }
 
@@ -259,7 +251,6 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
               mapStyle={props.mapStyle}
               width="100vw" height="100vh"
             />
-            {renderTooltip(props)}
           </DeckGL>
         </div>
         <StyledLocateMeButtonContainer>

@@ -21,6 +21,7 @@ export type ApplicationState = {
 export type ParkingSpace = {
   coordinate: Coordinate;
   id: string;
+  stMarkerId: string;
   currentRestriction?: ParkingRestriction;
 }
 
@@ -50,6 +51,7 @@ export type APIResponseParkingSpace = {
     coordinates: [string, string]
   };
   bay_id: string;
+  st_marker_id: string;
   restrictions: APIResponseParkingRestriction[];
 }
 

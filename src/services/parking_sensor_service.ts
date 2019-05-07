@@ -15,7 +15,8 @@ const convertAPIParkingSpace = (apiResponseParkingSpaces: APIResponseParkingSpac
         longitude: Number(p.location.coordinates[0])
       },
       currentRestriction: getCurrentParkingRestriction(p.restrictions),
-      id: p.bay_id
+      id: p.bay_id,
+      stMarkerId: p.st_marker_id
     }
   });
 };

@@ -95,6 +95,7 @@ const processData = (inAccessibleParkingMode: boolean, showLoadingZonesOnly: boo
     return {
       position: [Number(parkingSpace.coordinate.longitude), Number(parkingSpace.coordinate.latitude)] as [number, number],
       bayId: parkingSpace.id,
+      stMarkerId: parkingSpace.stMarkerId,
       currentRestriction: setDisplayDuration(parkingSpace.currentRestriction, inAccessibleParkingMode),
       index: idx++
     }

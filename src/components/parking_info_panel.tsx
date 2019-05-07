@@ -30,6 +30,18 @@ const PaperSC = styled(Paper)`
   @media (min-width: 768px) {
     padding: 15px;
   }
+  // display: flex;
+  // flex-wrap: nowrap;
+  // align-items: center;
+`;
+
+const Title = styled('div')`
+  text-align: center;
+  font-weight: bold;
+  color: grey;
+`;
+
+const InfoPanel = styled('div')`
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
@@ -82,6 +94,8 @@ const ParkingInfoPanel: React.FunctionComponent<DirectionPanelProps & React.HTML
 
   return (
     <PaperSC className={props.className}>
+      <Title>{props.clickedMapObject.object.stMarkerId}</Title>
+      <InfoPanel>
         <LeftPanel>
           <ParkingSign signType={signType} minutes={duration} timeRangeDesc={parkingSignTimeRangeDesc}/>
         </LeftPanel>
@@ -90,6 +104,7 @@ const ParkingInfoPanel: React.FunctionComponent<DirectionPanelProps & React.HTML
             props.clickedMapObject &&
             buildDirectionButton(props.originCoordinate, props.clickedMapObject)}
         </RightPanel>
+      </InfoPanel>
     </PaperSC>
   )
 };

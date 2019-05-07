@@ -1,7 +1,7 @@
 import React from "react";
 import { ApplicationState, ClickedMapObject, Coordinate, ParkingRestriction } from "../types";
 import { connect } from "react-redux";
-import { Paper } from '@material-ui/core';
+import { Paper, Divider as MuiDivider } from '@material-ui/core';
 import styled from 'styled-components';
 
 import ParkingSign, { ParkingSignType } from './parking_sign';
@@ -26,10 +26,7 @@ const buildDirectionButton = (originCoordinate: Coordinate, clickedMapObject: Cl
 };
 
 const PaperSC = styled(Paper)`
-  padding: 10px;
-  @media (min-width: 768px) {
-    padding: 15px;
-  }
+  padding: 8px;
 `;
 
 const Title = styled('div')`
@@ -52,6 +49,10 @@ const LeftPanel = styled('div')`
 const RightPanel = styled('div')`
   flex-grow: 2;
   text-align: center;
+`;
+
+const Divider = styled(MuiDivider)`
+  && { margin-top: 5px; }
 `;
 
 const currentRestrictionExists = (clickedMapObject: ClickedMapObject) => {
@@ -92,6 +93,7 @@ const ParkingInfoPanel: React.FunctionComponent<DirectionPanelProps & React.HTML
   return (
     <PaperSC className={props.className}>
       <Title>{props.clickedMapObject.object.stMarkerId}</Title>
+      <Divider variant="middle" />
       <InfoPanel>
         <LeftPanel>
           <ParkingSign signType={signType} minutes={duration} timeRangeDesc={parkingSignTimeRangeDesc}/>

@@ -1,6 +1,6 @@
 import {
-  clickParkingSpace, closePopupAlert,
-  hoverOnParkingIcon,
+  clickParkingSpace, closeAboutPopupAlert, closeDisclaimerPopupAlert,
+  hoverOnParkingIcon, openAboutPopup,
   resetClickedMapObject,
   toggleAccessibleMode,
   toggleShowLoadingZonesOnly,
@@ -29,7 +29,8 @@ const initialState: ApplicationState = {
   hoveringOnParkingIcon: false,
   inAccessibleParkingMode: false,
   showLoadingZonesOnly: false,
-  showPopupAlert: true
+  showDisclaimerPopup: true,
+  showAboutPopup: false
 };
 
 function findParkingApp(state: ApplicationState = initialState, action: any) {
@@ -59,8 +60,12 @@ function findParkingApp(state: ApplicationState = initialState, action: any) {
       return Object.assign({}, state, {inAccessibleParkingMode: !state.inAccessibleParkingMode});
     case getType(resetClickedMapObject):
       return Object.assign({}, state, {clickedMapObject: undefined});
-    case getType(closePopupAlert):
-      return Object.assign({}, state, {showPopupAlert: false});
+    case getType(closeDisclaimerPopupAlert):
+      return Object.assign({}, state, {showDisclaimerPopup: false});
+    case getType(openAboutPopup):
+      return Object.assign({}, state, {showAboutPopup: true});
+    case getType(closeAboutPopupAlert):
+      return Object.assign({}, state, {showAboutPopup: false});
     default:
       console.log('Unknown action', action.type);
       return state;

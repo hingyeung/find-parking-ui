@@ -4,6 +4,7 @@ import DeckGL, { IconLayer, MapView, ScatterplotLayer } from 'deck.gl';
 import LocateMeButton from './locate_me_button';
 import LoadingZoneIcon from '@material-ui/icons/LocalShipping';
 import AccessibleIcon from '@material-ui/icons/Accessible';
+import ContactIcon from '@material-ui/icons/ContactSupport';
 import {
   ApplicationState,
   ClickedMapObject,
@@ -18,6 +19,7 @@ import { Dispatch } from "redux";
 import {
   clickParkingSpace,
   hoverOnParkingIcon,
+  openAboutPopup,
   resetClickedMapObject,
   toggleAccessibleMode,
   toggleShowLoadingZonesOnly,
@@ -26,15 +28,17 @@ import {
 import ParkingInfoPanel from "./parking_info_panel";
 import styled from 'styled-components';
 import ParkingIconAtlas from '../assets/parking_icon_sprites.png';
-import { AppBar, Hidden, IconButton, SvgIcon, Toolbar, Typography } from '@material-ui/core';
-import PopupAlert from './popup_alert';
-import { GithubIcon } from './svg_icons';
+import { AppBar, Hidden, IconButton, Toolbar, Typography } from '@material-ui/core';
+import DisclaimerPopup from './disclaimer_popup';
+import AboutPopup from './about_popup';
 import {
   BTW_16_AND_60_PARKING_ICON,
   BTW_61_AND_120_PARKING_ICON,
   CURRENT_LOCATION_ICON,
-  GTE_121_PARKING_ICON, LTE_15_PARKING_ICON,
-  MAPBOX_TOKEN, PARKING_ICON_MAPPING,
+  GTE_121_PARKING_ICON,
+  LTE_15_PARKING_ICON,
+  MAPBOX_TOKEN,
+  PARKING_ICON_MAPPING,
   UNKNOWN_RESTRICTION_PARKING_ICON
 } from '../constants';
 
@@ -52,6 +56,7 @@ type IParkingMapProps = {
   showLoadingZonesOnly: boolean;
   toggleShowLoadingZonesOnly: () => void;
   toggleAccessibleMode: () => void;
+  showAboutPopup: () => void;
 }
 
 const doShowLoadingZonesOnly = (parkings: ClickedMapObjectPayload[], showLoadingZonesOnly: boolean) => {
@@ -198,24 +203,30 @@ const StyledParkingInfoPanel = styled(ParkingInfoPanel)`
   }
 `;
 
-type StyledIconButtonProps = {
+type ToggleIconButtonProps = {
   selected: boolean;
 };
 
-const StyledIconButton = styled(IconButton)`
+const ToggleIconButton = styled(IconButton)`
 // https://medium.com/sipios/use-styled-components-with-material-ui-react-e0759f9a15ce
   && {
-    ${(props: StyledIconButtonProps) => {
+    ${(props: ToggleIconButtonProps) => {
     if (props.selected) {
       return `
         color: white;
         `
       } else {
         return `
-          color: rgba(0, 0, 0, 0.5);
+          color: rgba(255, 255, 255, 0.2);
         `
       }
     }}
+  }
+`;
+
+const AboutIconButton = styled(IconButton)`
+  && {
+    color: #EEE;
   }
 `;
 
@@ -231,9 +242,9 @@ const StyledToolbar = styled(Toolbar)`
 const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
     return (
       <div>
-        <PopupAlert title={'Attention'}>
+        <DisclaimerPopup title={'Attention'}>
           Please note that Parking Sensors are not operational on Public Holidays. Parking Sensors will show car parks as vacant when blocked by construction zones.
-        </PopupAlert>
+        </DisclaimerPopup>
         <div id="parking-map-wrapper">
           <DeckGL
             onViewStateChange={props.onMapViewStateChange}
@@ -264,17 +275,18 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
                 <Hidden xsDown>Find available parking spaces in Melbourne CBD</Hidden>
               </Typography>
             </StyledTitleWrapper>
-            <StyledIconButton selected={props.inAccessibleParkingMode} onClick={props.toggleAccessibleMode}>
+            <ToggleIconButton selected={props.inAccessibleParkingMode} onClick={props.toggleAccessibleMode}>
               <AccessibleIcon/>
-            </StyledIconButton>
-            <StyledIconButton selected={props.showLoadingZonesOnly} onClick={props.toggleShowLoadingZonesOnly}>
+            </ToggleIconButton>
+            <ToggleIconButton selected={props.showLoadingZonesOnly} onClick={props.toggleShowLoadingZonesOnly}>
               <LoadingZoneIcon/>
-            </StyledIconButton>
-            <StyledIconButton selected={false}>
-              <GithubIcon/>
-            </StyledIconButton>
+            </ToggleIconButton>
+            <AboutIconButton onClick={props.showAboutPopup}>
+              <ContactIcon/>
+            </AboutIconButton>
           </StyledToolbar>
         </AppBar>
+        <AboutPopup/>
       </div>
     )
 };
@@ -313,6 +325,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     },
     toggleShowLoadingZonesOnly: () => {
       dispatch(toggleShowLoadingZonesOnly());
+    },
+    showAboutPopup: () => {
+      dispatch(openAboutPopup());
     },
     toggleAccessibleMode: () => {
       dispatch(toggleAccessibleMode());

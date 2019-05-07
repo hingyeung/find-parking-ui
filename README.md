@@ -42,3 +42,6 @@ Performs the initial infrastructure setup in AWS. This is the high level outline
 1. in Route53, setup a DNS A record alias in `HOSTED_ZONE` hosted zone and points it to the CloudFront distribution created in the previous step.
 
 See [find-parking-ui-cf.yaml](scripts/find-parking-ui-cf.yaml) for more details.
+
+### Others
+The image sprites used in this web app was created using [TexturePacker](https://www.codeandweb.com/texturepacker).

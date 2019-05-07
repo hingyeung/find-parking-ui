@@ -20,10 +20,26 @@ const HOVER_ON_PARKING_ICON = "HOVER_ON_PARKING_ICON";
 const TOGGLE_SHOW_LOADING_ZONES_ONLY = "TOGGLE_SHOW_LOADING_ZONES_ONLY";
 const TOGGLE_ACCESSIBLE_MODE = "TOGGLE_ACCESSIBLE_MODE";
 const RESET_CLICKED_MAP_OBJECT = "RESET_CLICKED_MAP_OBJECT";
-const CLOSE_POPUP_ALERT = "CLOSE_POPUP_ALERT";
+const CLOSE_DISCLAIMER_POPUP_ALERT = "CLOSE_DISCLAIMER_POPUP_ALERT";
+const CLOSE_ABOUT_POPUP_ALERT = "CLOSE_ABOUT_POPUP_ALERT";
+const OPEN_ABOUT_POPUP_ALERT = "OPEN_ABOUT_POPUP_ALERT";
 
-export const closePopupAlert = createAction(
-  CLOSE_POPUP_ALERT,
+export const closeDisclaimerPopupAlert = createAction(
+  CLOSE_DISCLAIMER_POPUP_ALERT,
+  resolve => {
+    return () => resolve();
+  }
+);
+
+export const openAboutPopup = createAction(
+  OPEN_ABOUT_POPUP_ALERT,
+  resolve => {
+    return () => resolve();
+  }
+);
+
+export const closeAboutPopupAlert = createAction(
+  CLOSE_ABOUT_POPUP_ALERT,
   resolve => {
     return () => resolve();
   }

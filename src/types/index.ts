@@ -14,7 +14,8 @@ export type ApplicationState = {
   hoveringOnParkingIcon: boolean;
   showLoadingZonesOnly: boolean;
   inAccessibleParkingMode: boolean;
-  showPopupAlert: boolean;
+  showDisclaimerPopup: boolean;
+  showAboutPopup: boolean;
 }
 
 export type ParkingSpace = {

@@ -2,7 +2,7 @@
 
 This is a web app that helps you find available on-street parking in Melbourne CBD. The real-time parking sensor data is provided by [City of Melbourne's Open Data Platform](https://data.melbourne.vic.gov.au/Transport-Movement/On-street-Parking-Bay-Sensors/vh2v-4nfs).
 
-This React web app is designed to work with a serverless, Node.js [backend](). All deployment-related scripts are designed to work with Amazon Web Services.
+This React web app is designed to work with a serverless, Node.js [backend](https://github.com/hingyeung/find-parking). All deployment-related scripts are designed to work with Amazon Web Services.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

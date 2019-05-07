@@ -7,6 +7,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText as MuiD
 import { GithubIcon } from './svg_icons';
 import styled from 'styled-components';
 import Author from './author';
+import Link from '@material-ui/core/Link';
 
 type AboutPopupProps = {
   closePopupAlert: () => void;
@@ -24,7 +25,7 @@ const AboutPopup: React.FunctionComponent<AboutPopupProps> = (props) => {
       <DialogContent>
         <DialogContentText>
           This website helps you find on-street parkings in Melbourne CBD using real time parking bay
-          sensor data provided by <a href="https://data.melbourne.vic.gov.au/" rel="nofollow" target="_blank">City of Melbourne Open Data Platform</a>.
+          sensor data provided by <Link href="https://data.melbourne.vic.gov.au/" rel="nofollow" target="_blank">City of Melbourne Open Data Platform</Link>.
         </DialogContentText>
         <DialogContentText>
           The parking bay sensor data on this website updates every 2 minutes between 6am to 11pm everyday. Sensor data is updated at reduced frequency between 11pm to 6am. Parking Sensors are not operational on Public Holidays. Parking Sensors will show car parks as vacant when blocked by construction zones.

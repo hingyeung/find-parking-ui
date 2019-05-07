@@ -16,6 +16,7 @@ export type ApplicationState = {
   inAccessibleParkingMode: boolean;
   showDisclaimerPopup: boolean;
   showAboutPopup: boolean;
+  errorMessage?: string;
 }
 
 export type ParkingSpace = {

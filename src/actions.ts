@@ -23,6 +23,22 @@ const RESET_CLICKED_MAP_OBJECT = "RESET_CLICKED_MAP_OBJECT";
 const CLOSE_DISCLAIMER_POPUP_ALERT = "CLOSE_DISCLAIMER_POPUP_ALERT";
 const CLOSE_ABOUT_POPUP_ALERT = "CLOSE_ABOUT_POPUP_ALERT";
 const OPEN_ABOUT_POPUP_ALERT = "OPEN_ABOUT_POPUP_ALERT";
+const CLEAR_ERROR_MESSAGE = "CLEAR_ERROR_MESSAGE";
+const SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE";
+
+export const setErrorMessage = createAction(
+  SET_ERROR_MESSAGE,
+  resolve => {
+    return (errMsg) => resolve(errMsg);
+  }
+);
+
+export const clearErrorMessage = createAction(
+  CLEAR_ERROR_MESSAGE,
+  resolve => {
+    return () => resolve();
+  }
+);
 
 export const closeDisclaimerPopupAlert = createAction(
   CLOSE_DISCLAIMER_POPUP_ALERT,
@@ -113,7 +129,12 @@ export const fetchCurrentLocationAndAvailableParkingsWithThunk = () => {
     return dispatch(fetchCurrentLocationWithThunk()).then(() => {
       const currentLocation = getState().currentLocation || UNDEFINED_LOCATION;
       dispatch(fetchParkingSensorDataWithThunk(currentLocation)).then(() => {
+      }).catch(err => {
+        dispatch(setErrorMessage("Unable to contact server!"))
       })
+    }).catch((err) => {
+      console.error(err);
+      dispatch(setErrorMessage("Unable to fetch current location!"));
     })
   }
 };

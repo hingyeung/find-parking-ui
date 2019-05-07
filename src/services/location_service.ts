@@ -5,7 +5,6 @@ function getCurrentPosition(): Promise<Coordinate> {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          // console.log(position);
           resolve({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude

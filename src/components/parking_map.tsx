@@ -5,6 +5,7 @@ import LocateMeButton from './locate_me_button';
 import LoadingZoneIcon from '@material-ui/icons/LocalShipping';
 import AccessibleIcon from '@material-ui/icons/Accessible';
 import ContactIcon from '@material-ui/icons/ContactSupport';
+import FPSnackbar from './fp_snackbar';
 import {
   ApplicationState,
   ClickedMapObject,
@@ -17,6 +18,7 @@ import {
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
 import {
+  clearErrorMessage,
   clickParkingSpace,
   hoverOnParkingIcon,
   openAboutPopup,
@@ -43,6 +45,7 @@ import {
 } from '../constants';
 
 type IParkingMapProps = {
+  errorMessage?: string;
   availableParkingSpaces: any[] | [];
   mapStyle?: string;
   currentLocation?: Coordinate;
@@ -57,6 +60,7 @@ type IParkingMapProps = {
   toggleShowLoadingZonesOnly: () => void;
   toggleAccessibleMode: () => void;
   showAboutPopup: () => void;
+  clearErrorMessage: () => void;
 }
 
 const doShowLoadingZonesOnly = (parkings: ClickedMapObjectPayload[], showLoadingZonesOnly: boolean) => {
@@ -279,6 +283,7 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
           </StyledToolbar>
         </AppBar>
         <AboutPopup/>
+        <FPSnackbar open={props.errorMessage !== undefined} onClose={props.clearErrorMessage} message={props.errorMessage}/>
       </div>
     )
 };
@@ -295,7 +300,8 @@ const mapStateToProps = (state: ApplicationState) => {
     mapViewState: state.mapViewState,
     hoveringOnParkingIcon: state.hoveringOnParkingIcon,
     inAccessibleParkingMode: state.inAccessibleParkingMode,
-    showLoadingZonesOnly: state.showLoadingZonesOnly
+    showLoadingZonesOnly: state.showLoadingZonesOnly,
+    errorMessage: state.errorMessage
   };
 };
 
@@ -324,6 +330,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     toggleAccessibleMode: () => {
       dispatch(toggleAccessibleMode());
       dispatch(resetClickedMapObject());
+    },
+    clearErrorMessage: () => {
+      dispatch(clearErrorMessage());
     }
   }
 };

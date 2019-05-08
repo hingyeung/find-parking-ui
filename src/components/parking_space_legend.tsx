@@ -26,8 +26,10 @@ const UnstyledLegendItem: React.FunctionComponent<LegendItemProps> = (props) => 
 };
 const LegendItem = styled(UnstyledLegendItem)`
   display: flex;
+  margin: 1px 0;
   flex: 0 0 90%;
   @media (min-width: 420px) {
+    margin: 2px 0;
     flex: 1 0 40%;
   }
   

@@ -25,6 +25,14 @@ const CLOSE_ABOUT_POPUP_ALERT = "CLOSE_ABOUT_POPUP_ALERT";
 const OPEN_ABOUT_POPUP_ALERT = "OPEN_ABOUT_POPUP_ALERT";
 const CLEAR_ERROR_MESSAGE = "CLEAR_ERROR_MESSAGE";
 const SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE";
+const SET_PICKED_PARKING_BAY_ID = "SET_PICKED_PARKING_BAY_ID";
+
+export const setPickedParkingBayId = createAction(
+  SET_PICKED_PARKING_BAY_ID,
+  resolve => {
+    return (pickedParkingBayId) => resolve(pickedParkingBayId);
+  }
+);
 
 export const setErrorMessage = createAction(
   SET_ERROR_MESSAGE,

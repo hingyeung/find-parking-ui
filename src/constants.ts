@@ -39,9 +39,9 @@ export const PARKING_ICON_MAPPING = {
     mask: false
   },
   [CURRENT_LOCATION_ICON]: {
-    x: 96,
+    x: 97,
     y: 0,
-    width: 24,
+    width: 22,
     height: 24,
     mask: false
   },

@@ -22,7 +22,7 @@ import {
   clickParkingSpace,
   hoverOnParkingIcon,
   openAboutPopup,
-  resetClickedMapObject,
+  resetClickedMapObject, setPickedParkingBayId,
   toggleAccessibleMode,
   toggleShowLoadingZonesOnly,
   updateMapViewState
@@ -45,6 +45,7 @@ import {
 } from '../constants';
 
 type IParkingMapProps = {
+  pickedParkingBayId?: string;
   errorMessage?: string;
   availableParkingSpaces: any[] | [];
   mapStyle?: string;
@@ -61,6 +62,7 @@ type IParkingMapProps = {
   toggleAccessibleMode: () => void;
   showAboutPopup: () => void;
   clearErrorMessage: () => void;
+  setPickedParkingBayId: (pickedParkingBayId: string) => void;
 }
 
 const doShowLoadingZonesOnly = (parkings: ClickedMapObjectPayload[], showLoadingZonesOnly: boolean) => {
@@ -110,7 +112,7 @@ const processData = (inAccessibleParkingMode: boolean, showLoadingZonesOnly: boo
   return parkingsToShow;
 };
 
-const getParkingIcon = (currentRestriction: ParkingRestriction | undefined) => {
+const getParkingIconBaseOnRestriction = (currentRestriction: ParkingRestriction | undefined) => {
   if (! currentRestriction) { return UNKNOWN_RESTRICTION_PARKING_ICON; }
 
   if (currentRestriction.displayDuration <= 15) return LTE_15_PARKING_ICON;
@@ -119,7 +121,7 @@ const getParkingIcon = (currentRestriction: ParkingRestriction | undefined) => {
   if (currentRestriction.displayDuration > 121) return GTE_121_PARKING_ICON;
 };
 
-const buildIconLayer = (id: string, icon: string, data: ClickedMapObjectPayload[] | MapObjectPayload[], onClickFn: Function, onHoverOnParkingIconFn: Function, getIcon: Function | undefined) => {
+const buildIconLayer = (id: string, icon: string, data: ClickedMapObjectPayload[] | MapObjectPayload[], onClickFn: Function, onHoverOnParkingIconFn: Function, getIcon: Function | undefined, getSize: Function | number) => {
   return new IconLayer({
     id: id,
     getPosition: (d: any) => d.position,
@@ -128,7 +130,6 @@ const buildIconLayer = (id: string, icon: string, data: ClickedMapObjectPayload[
     radiusMaxPixels: 10,
     pickable: true,
     onClick: onClickFn,
-    autoHighlight: true,
     // undefined info.object indicates hover-off
     onHover: (info: any, event: any) => {onHoverOnParkingIconFn(info.object !== undefined);},
     // For whatever reason, I just couldn't get IconsLayer's auto packing iconAtlas feature working for me.
@@ -139,24 +140,30 @@ const buildIconLayer = (id: string, icon: string, data: ClickedMapObjectPayload[
     iconAtlas: icon,
     iconMapping: PARKING_ICON_MAPPING,
     getIcon,
-    getSize: (d: ClickedMapObjectPayload) => 30,
-    sizeScale: 1,
+    getSize: getSize,
     data
   })
 };
 
 const _renderLayers = (props: IParkingMapProps) => {
-  const {availableParkingSpaces, currentLocation, onParkingSpaceClicked} = props;
+  const {availableParkingSpaces, currentLocation, onParkingSpaceClicked, setPickedParkingBayId, pickedParkingBayId, hoverOnParkingIcon} = props;
   const layers = [
     buildIconLayer(
       'parking-spaces',
       ParkingIconAtlas,
       availableParkingSpaces,
       (info: any) => {
-        props.onParkingSpaceClicked(info)
+        setPickedParkingBayId(info.object.bayId);
+        onParkingSpaceClicked(info);
       },
-      props.hoverOnParkingIcon,
-      (d: ClickedMapObjectPayload) => getParkingIcon(d.currentRestriction)
+      hoverOnParkingIcon,
+      (d: ClickedMapObjectPayload) => {
+        // if (props.pickedParkingBayId !== undefined && props.pickedParkingBayId === d.bayId) return LTE_15_PARKING_ICON;
+        return getParkingIconBaseOnRestriction(d.currentRestriction)
+      },
+      (d: ClickedMapObjectPayload) => {
+        return (pickedParkingBayId !== undefined && pickedParkingBayId === d.bayId) ? 40 : 30;
+      }
     )
   ];
 
@@ -172,7 +179,8 @@ const _renderLayers = (props: IParkingMapProps) => {
           props.onParkingSpaceClicked(info)
         },
         () => {},
-        (d: ClickedMapObjectPayload) => CURRENT_LOCATION_ICON
+        (d: ClickedMapObjectPayload) => CURRENT_LOCATION_ICON,
+        30
       )
     )
   }
@@ -306,7 +314,8 @@ const mapStateToProps = (state: ApplicationState) => {
     hoveringOnParkingIcon: state.hoveringOnParkingIcon,
     inAccessibleParkingMode: state.inAccessibleParkingMode,
     showLoadingZonesOnly: state.showLoadingZonesOnly,
-    errorMessage: state.errorMessage
+    errorMessage: state.errorMessage,
+    pickedParkingBayId: state.pickedParkingBayId
   };
 };
 
@@ -338,6 +347,11 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     },
     clearErrorMessage: () => {
       dispatch(clearErrorMessage());
+    },
+    setPickedParkingBayId: (pickedParkingBayId: string) => {
+      if (pickedParkingBayId !== undefined) {
+        dispatch(setPickedParkingBayId(pickedParkingBayId));
+      }
     }
   }
 };

@@ -21,7 +21,6 @@ const DirectionButton: React.FunctionComponent<DirectionButtonProps> = props => 
 };
 
 const StyledDirectionButton = styled(DirectionButton)`
-  width: 80%;
 `;
 
 export default StyledDirectionButton;

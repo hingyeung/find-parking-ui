@@ -39,6 +39,10 @@ const InfoPanel = styled('div')`
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
+  flex-direction: column;
+  @media (min-width: 420px) {
+    flex-direction: row;
+  }
 `;
 
 const LeftPanel = styled('div')`
@@ -49,6 +53,7 @@ const LeftPanel = styled('div')`
 const RightPanel = styled('div')`
   flex-grow: 2;
   text-align: center;
+  margin: 0.5rem 0;
 `;
 
 const Divider = styled(MuiDivider)`
@@ -115,4 +120,19 @@ const mapStateToProps = (state: ApplicationState) => {
   }
 };
 
-export default connect(mapStateToProps)(ParkingInfoPanel);
+const ConnectedParkingInfoPanel = connect(mapStateToProps)(ParkingInfoPanel);
+
+export default styled(ConnectedParkingInfoPanel)`
+  position: absolute;
+  bottom: 20px;
+  left: 5%;
+  width: 60%;
+
+  @media (min-width: 420px) and (max-width: 768px) {
+    width: 45%;
+  }
+
+  @media (min-width: 769px) {
+    width: 35%;
+  }
+`;

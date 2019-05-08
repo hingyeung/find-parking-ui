@@ -193,26 +193,6 @@ const StyledLocateMeButtonContainer = styled('div')`
   right: 25px;
 `;
 
-const StyledParkingInfoPanel = styled(ParkingInfoPanel)`
-  position: absolute;
-  bottom: 20px;
-  left: 5%;
-  right: 5%;
-  width: 80%;
-
-  @media (min-width: 420px) and (max-width: 768px) {
-    width: 45%;
-  }
-
-  @media (min-width: 769px) {
-    width: 30%;
-  }
-
-  @media (min-height: 415px) {
-    bottom: 100px;
-  }
-`;
-
 type ToggleIconButtonProps = {
   selected: boolean;
 };
@@ -273,7 +253,7 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
         <StyledLocateMeButtonContainer>
           <LocateMeButton />
         </StyledLocateMeButtonContainer>
-        <StyledParkingInfoPanel inAccessibleParkingMode={props.inAccessibleParkingMode}/>
+        <ParkingInfoPanel inAccessibleParkingMode={props.inAccessibleParkingMode}/>
         <AppBar position="fixed" color="primary">
           <StyledToolbar>
             <StyledTitleWrapper>

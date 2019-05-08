@@ -6,12 +6,12 @@ import emailIcon from '../assets/mail.svg'
 const AuthorSC = styled.div`
   text-align: center;
   font-size: small;
-  margin-top: 50px;
 `;
 
 const SocialIcon = styled.img`
   width: 18px;
   height: 18px;
+  vertical-align: text-bottom;
 `;
 
 const IconLink: React.FunctionComponent<{iconSrc: string;} & React.HTMLProps<HTMLAnchorElement & HTMLImageElement>> = (props) => {
@@ -35,11 +35,7 @@ const Name = styled.div`
 const Author: React.FunctionComponent = (props) => {
   return (
     <AuthorSC>
-      <Name>&#169; Samuel Li</Name>
-      <div>
-        <StyledIconLink href="mailto:samli@samuelli.net" alt="email icon" iconSrc={emailIcon}/>
-        <StyledIconLink href="https://github.com/hingyeung/find-parking-ui" target="_blank" alt="github icon" iconSrc={githubIcon}/>
-      </div>
+      <Name>&#169; Samuel Li</Name><StyledIconLink href="mailto:samli@samuelli.net" alt="email icon" iconSrc={emailIcon}/><StyledIconLink href="https://github.com/hingyeung/find-parking-ui" target="_blank" alt="github icon" iconSrc={githubIcon}/>
     </AuthorSC>
   )
 };

@@ -131,6 +131,11 @@ const buildIconLayer = (id: string, icon: string, data: ClickedMapObjectPayload[
     autoHighlight: true,
     // undefined info.object indicates hover-off
     onHover: (info: any, event: any) => {onHoverOnParkingIconFn(info.object !== undefined);},
+    // For whatever reason, I just couldn't get IconsLayer's auto packing iconAtlas feature working for me.
+    // https://github.com/uber/deck.gl/blob/master/docs/layers/icon-layer.md#example-auto-packing-iconatlas
+    // I have to fall back to pre-packed iconAtlas, which requires image sprite.
+    // I also couldn't remove the transparency in the SVG, so I have to convert them to PNG before creating
+    // the image sprite.
     iconAtlas: icon,
     iconMapping: PARKING_ICON_MAPPING,
     getIcon,

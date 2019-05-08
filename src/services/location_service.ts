@@ -6,10 +6,8 @@ function getCurrentPosition(): Promise<Coordinate> {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           resolve({
-            // latitude: position.coords.latitude,
-            // longitude: position.coords.longitude
-            latitude: -37.813084,
-            longitude: 144.963336
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
           });
         },
         (err) => {

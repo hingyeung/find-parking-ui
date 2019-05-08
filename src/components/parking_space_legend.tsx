@@ -15,18 +15,29 @@ type LegendItemProps = {
 const UnstyledLegendItem: React.FunctionComponent<LegendItemProps> = (props) => {
   return (
     <div className={props.className}>
-  <img src={props.icon}/>
-  <Typography variant="body1" inline={true}>
-    {props.desc}
-  </Typography>
-  </div>
+      <div className={props.className + ' icon'}></div>
+      <div className={props.className + ' desc'}>
+        <Typography variant="body1" inline={true}>
+          {props.desc}
+        </Typography>
+      </div>
+    </div>
 );
 };
 const LegendItem = styled(UnstyledLegendItem)`
-  flex: 1 0 40%;
-  img {
-    vertical-align: text-bottom;
-    margin-right: 1rem;
+  display: flex;
+  flex: 0 0 90%;
+  @media (min-width: 420px) {
+    flex: 1 0 40%;
+  }
+  
+  .icon {
+    align-items: center;
+    flex: 0 0 24px;
+    background: url(${(props) => props.icon}) no-repeat center;
+  }
+  .desc {
+    padding-left: 0.5rem;
   }
 `;
 

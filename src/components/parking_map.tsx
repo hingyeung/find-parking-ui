@@ -258,7 +258,7 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
           <StyledToolbar>
             <StyledTitleWrapper>
               <Typography component="h1" variant="h5" color="inherit">
-                CBD Parking Finder
+                Melbourne CBD Parking Finder
               </Typography>
               <Typography component="h2" variant="subtitle2" color="inherit">
                 <Hidden xsDown>Find available parking spaces in Melbourne CBD</Hidden>

@@ -1,29 +1,14 @@
 import React from "react";
 import { ApplicationState, ClickedMapObject, Coordinate, ParkingRestriction } from "../types";
 import { connect } from "react-redux";
-import { Paper, Divider as MuiDivider } from '@material-ui/core';
+import { Paper, Typography } from '@material-ui/core';
 import styled from 'styled-components';
-
+import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
 import ParkingSign, { ParkingSignType } from './parking_sign';
 import DirectionButton from './direction_button';
-
-type DirectionPanelProps = {
-  clickedMapObject?: ClickedMapObject,
-  originCoordinate?: Coordinate,
-  inAccessibleParkingMode: boolean
-};
-
-const buildDirectionButton = (originCoordinate: Coordinate, clickedMapObject: ClickedMapObject) => {
-  const originLat = originCoordinate.latitude,
-    originLng = originCoordinate.longitude,
-    destLat = clickedMapObject.object.position[1],
-    destLng = clickedMapObject.object.position[0],
-    directionLinkUrl = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${destLat},${destLng}&travelmode=driving`;
-
-  return (
-    <DirectionButton directionLink={directionLinkUrl}/>
-  )
-};
+import { Dispatch } from 'redux';
+import { resetClickedMapObject } from '../actions';
 
 const PaperSC = styled(Paper)`
   padding: 8px;
@@ -31,8 +16,12 @@ const PaperSC = styled(Paper)`
 
 const Title = styled('div')`
   text-align: center;
-  font-weight: bold;
-  color: grey;
+  border-bottom: rgba(0, 0, 0, 0.12) solid 1px;
+  .close-button {
+    top: 0;
+    right: 0;
+    position: absolute;
+  }
 `;
 
 const InfoPanel = styled('div')`
@@ -56,9 +45,24 @@ const RightPanel = styled('div')`
   margin: 0.5rem 0;
 `;
 
-const Divider = styled(MuiDivider)`
-  && { margin-top: 5px; }
-`;
+type DirectionPanelProps = {
+  clickedMapObject?: ClickedMapObject,
+  originCoordinate?: Coordinate,
+  inAccessibleParkingMode: boolean,
+  onClose: () => void
+};
+
+const buildDirectionButton = (originCoordinate: Coordinate, clickedMapObject: ClickedMapObject) => {
+  const originLat = originCoordinate.latitude,
+    originLng = originCoordinate.longitude,
+    destLat = clickedMapObject.object.position[1],
+    destLng = clickedMapObject.object.position[0],
+    directionLinkUrl = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${destLat},${destLng}&travelmode=driving`;
+
+  return (
+    <DirectionButton directionLink={directionLinkUrl}/>
+  )
+};
 
 const currentRestrictionExists = (clickedMapObject: ClickedMapObject) => {
   return clickedMapObject.object && clickedMapObject.object.currentRestriction;
@@ -97,8 +101,14 @@ const ParkingInfoPanel: React.FunctionComponent<DirectionPanelProps & React.HTML
 
   return (
     <PaperSC className={props.className}>
-      <Title>{props.clickedMapObject.object.stMarkerId}</Title>
-      <Divider variant="middle" />
+      <Title>
+        <Typography variant="h6" inline>
+          {props.clickedMapObject.object.stMarkerId}
+        </Typography>
+        <IconButton className="close-button" aria-label="Close" onClick={props.onClose}>
+          <CloseIcon/>
+        </IconButton>
+      </Title>
       <InfoPanel>
         <LeftPanel>
           <ParkingSign signType={signType} minutes={duration} timeRangeDesc={parkingSignTimeRangeDesc}/>
@@ -120,7 +130,13 @@ const mapStateToProps = (state: ApplicationState) => {
   }
 };
 
-const ConnectedParkingInfoPanel = connect(mapStateToProps)(ParkingInfoPanel);
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  onClose: () => {
+    dispatch(resetClickedMapObject());
+  }
+});
+
+const ConnectedParkingInfoPanel = connect(mapStateToProps, mapDispatchToProps)(ParkingInfoPanel);
 
 export default styled(ConnectedParkingInfoPanel)`
   position: absolute;

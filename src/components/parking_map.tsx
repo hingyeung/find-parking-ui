@@ -22,7 +22,7 @@ import {
   clickParkingSpace,
   hoverOnParkingIcon,
   openAboutPopup,
-  resetClickedMapObject, setPickedParkingBayId,
+  resetClickedMapObject,
   toggleAccessibleMode,
   toggleShowLoadingZonesOnly,
   updateMapViewState
@@ -45,7 +45,6 @@ import {
 } from '../constants';
 
 type IParkingMapProps = {
-  pickedParkingBayId?: string;
   errorMessage?: string;
   availableParkingSpaces: any[] | [];
   mapStyle?: string;
@@ -62,7 +61,6 @@ type IParkingMapProps = {
   toggleAccessibleMode: () => void;
   showAboutPopup: () => void;
   clearErrorMessage: () => void;
-  setPickedParkingBayId: (pickedParkingBayId: string) => void;
 }
 
 const doShowLoadingZonesOnly = (parkings: ClickedMapObjectPayload[], showLoadingZonesOnly: boolean) => {
@@ -146,23 +144,19 @@ const buildIconLayer = (id: string, icon: string, data: ClickedMapObjectPayload[
 };
 
 const _renderLayers = (props: IParkingMapProps) => {
-  const {availableParkingSpaces, currentLocation, onParkingSpaceClicked, setPickedParkingBayId, pickedParkingBayId, hoverOnParkingIcon} = props;
+  const {availableParkingSpaces, currentLocation, onParkingSpaceClicked, hoverOnParkingIcon, clickedMapObject} = props;
   const layers = [
     buildIconLayer(
       'parking-spaces',
       ParkingIconAtlas,
       availableParkingSpaces,
-      (info: any) => {
-        setPickedParkingBayId(info.object.bayId);
-        onParkingSpaceClicked(info);
-      },
+      (info: any) => onParkingSpaceClicked(info),
       hoverOnParkingIcon,
       (d: ClickedMapObjectPayload) => {
-        // if (props.pickedParkingBayId !== undefined && props.pickedParkingBayId === d.bayId) return LTE_15_PARKING_ICON;
         return getParkingIconBaseOnRestriction(d.currentRestriction)
       },
       (d: ClickedMapObjectPayload) => {
-        return (pickedParkingBayId !== undefined && pickedParkingBayId === d.bayId) ? 40 : 30;
+        return (clickedMapObject !== undefined && clickedMapObject.object.bayId === d.bayId) ? 40: 30;
       }
     )
   ];
@@ -294,8 +288,7 @@ const mapStateToProps = (state: ApplicationState) => {
     hoveringOnParkingIcon: state.hoveringOnParkingIcon,
     inAccessibleParkingMode: state.inAccessibleParkingMode,
     showLoadingZonesOnly: state.showLoadingZonesOnly,
-    errorMessage: state.errorMessage,
-    pickedParkingBayId: state.pickedParkingBayId
+    errorMessage: state.errorMessage
   };
 };
 
@@ -327,11 +320,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     },
     clearErrorMessage: () => {
       dispatch(clearErrorMessage());
-    },
-    setPickedParkingBayId: (pickedParkingBayId: string) => {
-      if (pickedParkingBayId !== undefined) {
-        dispatch(setPickedParkingBayId(pickedParkingBayId));
-      }
     }
   }
 };

@@ -2,7 +2,7 @@ import {
   clearErrorMessage,
   clickParkingSpace, closeAboutPopupAlert, closeDisclaimerPopupAlert,
   hoverOnParkingIcon, openAboutPopup,
-  resetClickedMapObject, setErrorMessage, setPickedParkingBayId,
+  resetClickedMapObject, setErrorMessage,
   toggleAccessibleMode,
   toggleShowLoadingZonesOnly,
   updateAvailableParkings,
@@ -71,8 +71,6 @@ function findParkingApp(state: ApplicationState = initialState, action: any) {
       return Object.assign({}, state, {errorMessage: action.payload});
     case getType(clearErrorMessage):
       return Object.assign({}, state, {errorMessage: undefined});
-    case getType(setPickedParkingBayId):
-      return Object.assign({}, state, {pickedParkingBayId: action.payload});
     default:
       console.log('Unknown action', action.type);
       return state;

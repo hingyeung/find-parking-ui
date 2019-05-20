@@ -56,7 +56,7 @@ function findAvailableParkings(centreLocation: Coordinate) {
   const requestUrl = `${API_URL}?lat=${centreLocation.latitude}&lng=${centreLocation.longitude}&radiusInMeter=500`;
   return new Promise((resolve, reject) => {
     axios.get(requestUrl, {
-      timeout: 5000
+      timeout: 10000
     })
       .then((response: AxiosResponse) => {
         resolve(convertAPIParkingSpace(response.data));

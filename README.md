@@ -25,6 +25,10 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
 
+### `npm start_stubby`
+
+Start a local [Stubby server](https://github.com/mrak/stubby4node) to serve test data.
+
 ### `npm run build`
 
 Builds the app for production to the `build` folder.<br>

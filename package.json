@@ -31,7 +31,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "./scripts/deploy.sh",
-    "init_infrastructure": "./scripts/init_infrastructure.sh"
+    "init_infrastructure": "./scripts/init_infrastructure.sh",
+    "start_stubby": "npx stubby -w -d test/stubby/stubby.yaml"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -18,6 +18,7 @@ export type ApplicationState = {
   showAboutPopup: boolean;
   errorMessage?: string;
   pickedParkingBayId?: string;
+  isLoading: boolean;
 }
 
 export type ParkingSpace = {

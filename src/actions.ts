@@ -25,6 +25,7 @@ const CLOSE_ABOUT_POPUP_ALERT = "CLOSE_ABOUT_POPUP_ALERT";
 const OPEN_ABOUT_POPUP_ALERT = "OPEN_ABOUT_POPUP_ALERT";
 const CLEAR_ERROR_MESSAGE = "CLEAR_ERROR_MESSAGE";
 const SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE";
+const SET_FETCHING_PARKING_DATA_IN_PROGRESS = "SET_FETCHING_PARKING_DATA_IN_PROGRESS";
 
 export const setErrorMessage = createAction(
   SET_ERROR_MESSAGE,
@@ -124,16 +125,27 @@ export const updateAvailableParkings = createAction(
   }
 );
 
+export const isFetchingParkingData = createAction(
+  SET_FETCHING_PARKING_DATA_IN_PROGRESS,
+  resolve => {
+    return (isFetching: boolean) => resolve(isFetching);
+  }
+);
+
 export const fetchCurrentLocationAndAvailableParkingsWithThunk = () => {
   return async (dispatch: ThunkDispatch<ApplicationState, void, AnyAction>, getState: () => ApplicationState) => {
     return dispatch(fetchCurrentLocationWithThunk()).then(() => {
       const currentLocation = getState().currentLocation || UNDEFINED_LOCATION;
+      dispatch(isFetchingParkingData(true));
       dispatch(fetchParkingSensorDataWithThunk(currentLocation)).then(() => {
+        dispatch(isFetchingParkingData(false));
       }).catch(err => {
+        dispatch(isFetchingParkingData(false));
         dispatch(setErrorMessage("Unable to contact server!"))
       })
     }).catch((err) => {
       console.error(err);
+      dispatch(isFetchingParkingData(false));
       dispatch(setErrorMessage("Unable to fetch current location!"));
     })
   }

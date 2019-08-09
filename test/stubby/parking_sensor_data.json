@@ -1,205 +1,539 @@
 [
   {
-    "coordinate": {
-      "lat": "-37.8167541660727",
-      "lng": "144.96609310265694"
+    "bay_id": "1757",
+    "location": {
+      "coordinates": [
+        144.96259635335218,
+        -37.81433264770753
+      ],
+      "type": "Point"
     },
-    "bay_id": "1471"
+    "restrictions": [
+      {
+        "_id": "5d4d49f98920510b690c70b1",
+        "description": "1P MTR M-SAT 7:30-18:30",
+        "duration": 60,
+        "effectiveOnPH": false,
+        "typeDesc": "1P Meter",
+        "fromDay": 1,
+        "toDay": 6,
+        "startTime": "07:30:00",
+        "endTime": "18:30:00",
+        "disabilityExt": 120
+      },
+      {
+        "_id": "5d4d49f9892051eac90c70b0",
+        "description": "2P MTR M-SAT 18.30 - 20.30",
+        "duration": 120,
+        "effectiveOnPH": false,
+        "typeDesc": "2P",
+        "fromDay": 1,
+        "toDay": 6,
+        "startTime": "18:30:00",
+        "endTime": "20:30:00",
+        "disabilityExt": 240
+      },
+      {
+        "_id": "5d4d49f989205186020c70af",
+        "description": "1P SUN 7:30-18:30",
+        "duration": 60,
+        "effectiveOnPH": false,
+        "typeDesc": "1P",
+        "fromDay": 0,
+        "toDay": 0,
+        "startTime": "07:30:00",
+        "endTime": "18:30:00",
+        "disabilityExt": 120
+      }
+    ],
+    "st_marker_id": "2380N",
+    "status": "Unoccupied",
+    "updatedAt": "2019-08-09T10:24:56.123Z"
   },
   {
-    "coordinate": {
-      "lat": "-37.81280358928784",
-      "lng": "144.96260074246118"
+    "bay_id": "1009",
+    "location": {
+      "coordinates": [
+        144.96260074246118,
+        -37.81280358928784
+      ],
+      "type": "Point"
     },
-    "bay_id": "1009"
+    "restrictions": [
+      {
+        "_id": "5d4d49f989205195130c72b1",
+        "description": "2P DIS ONLY 7.30 - 20.30",
+        "duration": 120,
+        "effectiveOnPH": true,
+        "typeDesc": "2P Disabled Only",
+        "fromDay": 1,
+        "toDay": 0,
+        "startTime": "07:30:00",
+        "endTime": "20:30:00",
+        "disabilityExt": 0
+      },
+      {
+        "_id": "5d4d49f9892051d16c0c72b0",
+        "description": "4P DIS ONLY AOT",
+        "duration": 240,
+        "effectiveOnPH": true,
+        "typeDesc": "4P Disabled Only",
+        "fromDay": 0,
+        "toDay": 0,
+        "startTime": "20:30:00",
+        "endTime": "23:59:59",
+        "disabilityExt": 0
+      }
+    ],
+    "st_marker_id": "954E",
+    "status": "Unoccupied",
+    "updatedAt": "2019-08-09T10:24:56.123Z"
   },
   {
-    "coordinate": {
-      "lat": "-37.812853691907605",
-      "lng": "144.96262375530551"
+    "bay_id": "2493",
+    "location": {
+      "coordinates": [
+        144.96182294216285,
+        -37.81239592542448
+      ],
+      "type": "Point"
     },
-    "bay_id": "1007"
+    "restrictions": [
+      {
+        "_id": "5d4d49fe892051e5bf0c7e75",
+        "description": "1P MTR M-SAT 7:30-18:30",
+        "duration": 60,
+        "effectiveOnPH": false,
+        "typeDesc": "1P Meter",
+        "fromDay": 1,
+        "toDay": 6,
+        "startTime": "07:30:00",
+        "endTime": "18:30:00",
+        "disabilityExt": 120
+      },
+      {
+        "_id": "5d4d49fe8920512b5f0c7e74",
+        "description": "2P MTR M-SAT 18.30 - 20.30",
+        "duration": 120,
+        "effectiveOnPH": false,
+        "typeDesc": "2P",
+        "fromDay": 1,
+        "toDay": 6,
+        "startTime": "18:30:00",
+        "endTime": "20:30:00",
+        "disabilityExt": 240
+      },
+      {
+        "_id": "5d4d49fe892051fc210c7e73",
+        "description": "1P SUN 7:30-18:30",
+        "duration": 60,
+        "effectiveOnPH": false,
+        "typeDesc": "1P",
+        "fromDay": 0,
+        "toDay": 0,
+        "startTime": "07:30:00",
+        "endTime": "18:30:00",
+        "disabilityExt": 120
+      }
+    ],
+    "st_marker_id": "C2918",
+    "status": "Unoccupied",
+    "updatedAt": "2019-08-09T10:24:56.161Z"
   },
   {
-    "coordinate": {
-      "lat": "-37.811246410797146",
-      "lng": "144.9675098136646"
+    "bay_id": "2501",
+    "location": {
+      "coordinates": [
+        144.9614667230229,
+        -37.81249994562861
+      ],
+      "type": "Point"
     },
-    "bay_id": "888"
+    "restrictions": [
+      {
+        "_id": "5d4d49fe892051836c0c7e9d",
+        "description": "1P MTR M-SAT 7:30-18:30",
+        "duration": 60,
+        "effectiveOnPH": false,
+        "typeDesc": "1P Meter",
+        "fromDay": 1,
+        "toDay": 6,
+        "startTime": "07:30:00",
+        "endTime": "18:30:00",
+        "disabilityExt": 120
+      },
+      {
+        "_id": "5d4d49fe892051c0c90c7e9c",
+        "description": "2P MTR M-SAT 18.30 - 20.30",
+        "duration": 120,
+        "effectiveOnPH": false,
+        "typeDesc": "2P",
+        "fromDay": 1,
+        "toDay": 6,
+        "startTime": "18:30:00",
+        "endTime": "20:30:00",
+        "disabilityExt": 240
+      },
+      {
+        "_id": "5d4d49fe892051a55d0c7e9b",
+        "description": "1P SUN 7:30-18:30",
+        "duration": 60,
+        "effectiveOnPH": false,
+        "typeDesc": "1P",
+        "fromDay": 0,
+        "toDay": 0,
+        "startTime": "07:30:00",
+        "endTime": "18:30:00",
+        "disabilityExt": 120
+      }
+    ],
+    "st_marker_id": "C2934",
+    "status": "Unoccupied",
+    "updatedAt": "2019-08-09T10:24:56.162Z"
   },
   {
-    "coordinate": {
-      "lat": "-37.811257509886595",
-      "lng": "144.96738963162676"
+    "bay_id": "1674",
+    "location": {
+      "coordinates": [
+        144.9632997428124,
+        -37.81528963970968
+      ],
+      "type": "Point"
     },
-    "bay_id": "954"
+    "restrictions": [
+      {
+        "_id": "5d4d49fb8920516c700c76b2",
+        "description": "2P DIS 7.30AM TO 8.30PM",
+        "duration": 120,
+        "effectiveOnPH": true,
+        "typeDesc": "2P Disabled Only",
+        "fromDay": 1,
+        "toDay": 0,
+        "startTime": "07:30:00",
+        "endTime": "20:30:00",
+        "disabilityExt": 0
+      },
+      {
+        "_id": "5d4d49fb892051b1a00c76b1",
+        "description": "P DIS ONLY AOT",
+        "duration": 1440,
+        "effectiveOnPH": false,
+        "typeDesc": "Disabled Only",
+        "fromDay": 1,
+        "toDay": 0,
+        "startTime": "20:30:00",
+        "endTime": "23:59:59",
+        "disabilityExt": 0
+      },
+      {
+        "_id": "5d4d49fb892051ed250c76b0",
+        "description": "P DIS AOT 00.00-07.30",
+        "duration": 1440,
+        "effectiveOnPH": false,
+        "typeDesc": "Disabled Only",
+        "fromDay": 1,
+        "toDay": 0,
+        "startTime": "00:00:00",
+        "endTime": "07:30:00",
+        "disabilityExt": 0
+      }
+    ],
+    "st_marker_id": "2200N",
+    "status": "Unoccupied",
+    "updatedAt": "2019-08-09T10:24:56.161Z"
   },
   {
-    "coordinate": {
-      "lat": "-37.811306870582015",
-      "lng": "144.96741221649182"
+    "bay_id": "1841",
+    "location": {
+      "coordinates": [
+        144.96091705535343,
+        -37.813808533838944
+      ],
+      "type": "Point"
     },
-    "bay_id": "953"
+    "restrictions": [
+      {
+        "_id": "5d4d4a0089205102f90c8628",
+        "description": "2P DIS ONLY 7.30 - 20.30",
+        "duration": 120,
+        "effectiveOnPH": true,
+        "typeDesc": "2P Disabled Only",
+        "fromDay": 1,
+        "toDay": 0,
+        "startTime": "07:30:00",
+        "endTime": "20:30:00",
+        "disabilityExt": 0
+      },
+      {
+        "_id": "5d4d4a00892051d62b0c8627",
+        "description": "P DIS AOT 20:30 TO 23:59",
+        "duration": 1440,
+        "effectiveOnPH": true,
+        "typeDesc": "Disabled Only",
+        "fromDay": 1,
+        "toDay": 0,
+        "startTime": "20:30:00",
+        "endTime": "23:59:59",
+        "disabilityExt": 0
+      }
+    ],
+    "st_marker_id": "2549S",
+    "status": "Unoccupied",
+    "updatedAt": "2019-08-09T10:24:56.164Z"
   },
   {
-    "coordinate": {
-      "lat": "-37.81133017001849",
-      "lng": "144.96742283713283"
+    "bay_id": "1678",
+    "location": {
+      "coordinates": [
+        144.96303415225236,
+        -37.8153671893032
+      ],
+      "type": "Point"
     },
-    "bay_id": "952"
+    "restrictions": [
+      {
+        "_id": "5d4d49f9892051279e0c7231",
+        "description": "1/2P MTR M-SAT 7.30 TO 18.30",
+        "duration": 30,
+        "effectiveOnPH": false,
+        "typeDesc": "1/2P Meter",
+        "fromDay": 1,
+        "toDay": 6,
+        "startTime": "07:30:00",
+        "endTime": "18:30:00",
+        "disabilityExt": 60
+      },
+      {
+        "_id": "5d4d49f989205107ae0c7230",
+        "description": "2P MTR M-SAT 18.30 - 20.30",
+        "duration": 120,
+        "effectiveOnPH": false,
+        "typeDesc": "2P",
+        "fromDay": 1,
+        "toDay": 6,
+        "startTime": "18:30:00",
+        "endTime": "20:30:00",
+        "disabilityExt": 240
+      },
+      {
+        "_id": "5d4d49f989205155180c722f",
+        "description": "1P SUN 7:30-18:30",
+        "duration": 60,
+        "effectiveOnPH": false,
+        "typeDesc": "1P",
+        "fromDay": 0,
+        "toDay": 0,
+        "startTime": "07:30:00",
+        "endTime": "18:30:00",
+        "disabilityExt": 120
+      }
+    ],
+    "st_marker_id": "2208N",
+    "status": "Unoccupied",
+    "updatedAt": "2019-08-09T10:24:56.123Z"
   },
   {
-    "coordinate": {
-      "lat": "-37.81135346943457",
-      "lng": "144.96743345892835"
+    "bay_id": "1842",
+    "location": {
+      "coordinates": [
+        144.9608583998361,
+        -37.81382556863488
+      ],
+      "type": "Point"
     },
-    "bay_id": "951"
+    "restrictions": [
+      {
+        "_id": "5d4d49ff8920513c360c83e7",
+        "description": "1/2P MTR M-SAT 7.30 TO 18.30",
+        "duration": 30,
+        "effectiveOnPH": false,
+        "typeDesc": "1/2P Meter",
+        "fromDay": 1,
+        "toDay": 6,
+        "startTime": "07:30:00",
+        "endTime": "18:30:00",
+        "disabilityExt": 60
+      },
+      {
+        "_id": "5d4d49ff892051827f0c83e6",
+        "description": "2P MTR M-SAT 18.30 - 20.30",
+        "duration": 120,
+        "effectiveOnPH": false,
+        "typeDesc": "2P",
+        "fromDay": 1,
+        "toDay": 6,
+        "startTime": "18:30:00",
+        "endTime": "20:30:00",
+        "disabilityExt": 240
+      },
+      {
+        "_id": "5d4d49ff892051a2f50c83e5",
+        "description": "1P SUN 7:30-18:30",
+        "duration": 60,
+        "effectiveOnPH": false,
+        "typeDesc": "1P",
+        "fromDay": 0,
+        "toDay": 0,
+        "startTime": "07:30:00",
+        "endTime": "18:30:00",
+        "disabilityExt": 120
+      }
+    ],
+    "st_marker_id": "2551S",
+    "status": "Unoccupied",
+    "updatedAt": "2019-08-09T10:24:56.162Z"
   },
   {
-    "coordinate": {
-      "lat": "-37.8114017627735",
-      "lng": "144.9674554739191"
+    "bay_id": "1766",
+    "location": {
+      "coordinates": [
+        144.96132030224308,
+        -37.81470482592168
+      ],
+      "type": "Point"
     },
-    "bay_id": "949"
+    "restrictions": [
+      {
+        "_id": "5d4d49fb8920514adf0c785e",
+        "description": "1P MTR M-SAT 7:30-18:30",
+        "duration": 60,
+        "effectiveOnPH": false,
+        "typeDesc": "1P Meter",
+        "fromDay": 1,
+        "toDay": 6,
+        "startTime": "07:30:00",
+        "endTime": "18:30:00",
+        "disabilityExt": 120
+      },
+      {
+        "_id": "5d4d49fb89205105590c785d",
+        "description": "2P MTR M-SAT 18.30 - 20.30",
+        "duration": 120,
+        "effectiveOnPH": false,
+        "typeDesc": "2P",
+        "fromDay": 1,
+        "toDay": 6,
+        "startTime": "18:30:00",
+        "endTime": "20:30:00",
+        "disabilityExt": 240
+      },
+      {
+        "_id": "5d4d49fb8920518e530c785c",
+        "description": "1P SUN 7:30-18:30",
+        "duration": 60,
+        "effectiveOnPH": false,
+        "typeDesc": "1P",
+        "fromDay": 0,
+        "toDay": 0,
+        "startTime": "07:30:00",
+        "endTime": "18:30:00",
+        "disabilityExt": 120
+      }
+    ],
+    "st_marker_id": "2394N",
+    "status": "Unoccupied",
+    "updatedAt": "2019-08-09T10:24:56.161Z"
   },
   {
-    "coordinate": {
-      "lat": "-37.81137803962183",
-      "lng": "144.96744465926923"
+    "bay_id": "1013",
+    "location": {
+      "coordinates": [
+        144.9620053885929,
+        -37.81196495577784
+      ],
+      "type": "Point"
     },
-    "bay_id": "950"
+    "restrictions": [
+      {
+        "_id": "5d4d49f98920517c650c7392",
+        "description": "LZ 30M M-F 7:30-19:30",
+        "duration": 30,
+        "effectiveOnPH": false,
+        "typeDesc": "Loading Zone 30M",
+        "fromDay": 1,
+        "toDay": 5,
+        "startTime": "07:30:00",
+        "endTime": "19:30:00",
+        "disabilityExt": 0
+      },
+      {
+        "_id": "5d4d49f9892051e9310c7391",
+        "description": "1P SAT 7:30-19:30",
+        "duration": 60,
+        "effectiveOnPH": false,
+        "typeDesc": "1P",
+        "fromDay": 6,
+        "toDay": 6,
+        "startTime": "07:30:00",
+        "endTime": "19:30:00",
+        "disabilityExt": 120
+      },
+      {
+        "_id": "5d4d49f9892051ec280c7390",
+        "description": "1P SUN 7:30-18:30",
+        "duration": 60,
+        "effectiveOnPH": false,
+        "typeDesc": "1P",
+        "fromDay": 0,
+        "toDay": 0,
+        "startTime": "07:30:00",
+        "endTime": "18:30:00",
+        "disabilityExt": 120
+      }
+    ],
+    "st_marker_id": "961W",
+    "status": "Unoccupied",
+    "updatedAt": "2019-08-09T10:24:56.123Z"
   },
   {
-    "coordinate": {
-      "lat": "-37.81142548592456",
-      "lng": "144.96746628857727"
+    "bay_id": "1845",
+    "location": {
+      "coordinates": [
+        144.96061419972295,
+        -37.81389608901581
+      ],
+      "type": "Point"
     },
-    "bay_id": "948"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.81157057108945",
-      "lng": "144.96753234404272"
-    },
-    "bay_id": "946"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.81149443594989",
-      "lng": "144.96737383811362"
-    },
-    "bay_id": "883"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.811440710274084",
-      "lng": "144.96734907583001"
-    },
-    "bay_id": "884"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.811210911027",
-      "lng": "144.9673683886752"
-    },
-    "bay_id": "956"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.8111871873981",
-      "lng": "144.96735757463318"
-    },
-    "bay_id": "957"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.81116388797592",
-      "lng": "144.9673469528956"
-    },
-    "bay_id": "958"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.8108887374072",
-      "lng": "144.96669066831026"
-    },
-    "bay_id": "2322"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.81246042749984",
-      "lng": "144.96806467179186"
-    },
-    "bay_id": "874"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.81231930547644",
-      "lng": "144.96775142225908"
-    },
-    "bay_id": "875"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.812368780424066",
-      "lng": "144.96777381541787"
-    },
-    "bay_id": "873"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.8134107772366",
-      "lng": "144.9685031670179"
-    },
-    "bay_id": "869"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.81330885445871",
-      "lng": "144.96845679346052"
-    },
-    "bay_id": "6923"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.81179900698555",
-      "lng": "144.96213854762328"
-    },
-    "bay_id": "1017"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.81168094321042",
-      "lng": "144.9620837881459"
-    },
-    "bay_id": "1015"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.81174234412636",
-      "lng": "144.96211215811067"
-    },
-    "bay_id": "1014"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.811207387820446",
-      "lng": "144.9662508405088"
-    },
-    "bay_id": "2327"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.81118873125521",
-      "lng": "144.96631406952298"
-    },
-    "bay_id": "2326"
-  },
-  {
-    "coordinate": {
-      "lat": "-37.81093248766649",
-      "lng": "144.96654227147445"
-    },
-    "bay_id": "2324"
+    "restrictions": [
+      {
+        "_id": "5d4d4a008920514ebc0c8861",
+        "description": "1/2P MTR M-SAT 7.30 TO 18.30",
+        "duration": 30,
+        "effectiveOnPH": false,
+        "typeDesc": "1/2P Meter",
+        "fromDay": 1,
+        "toDay": 6,
+        "startTime": "07:30:00",
+        "endTime": "18:30:00",
+        "disabilityExt": 60
+      },
+      {
+        "_id": "5d4d4a008920515f8d0c8860",
+        "description": "2P MTR M-SAT 18.30 - 20.30",
+        "duration": 120,
+        "effectiveOnPH": false,
+        "typeDesc": "2P",
+        "fromDay": 1,
+        "toDay": 6,
+        "startTime": "18:30:00",
+        "endTime": "20:30:00",
+        "disabilityExt": 240
+      },
+      {
+        "_id": "5d4d4a0089205174b70c885f",
+        "description": "1P SUN 7:30-18:30",
+        "duration": 60,
+        "effectiveOnPH": false,
+        "typeDesc": "1P",
+        "fromDay": 0,
+        "toDay": 0,
+        "startTime": "07:30:00",
+        "endTime": "18:30:00",
+        "disabilityExt": 120
+      }
+    ],
+    "st_marker_id": "2557S",
+    "status": "Unoccupied",
+    "updatedAt": "2019-08-09T10:24:56.164Z"
   }
 ]

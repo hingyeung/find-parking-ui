@@ -6,9 +6,16 @@ This React web app is designed to work with a serverless, Node.js [find-parking]
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Local Development
 
-In the project directory, you can run:
+### Local environment config file
+Create .env.local in project root
+```
+> cat .env.local
+REACT_APP_MapboxAccessToken=<MAPBOX_TOKEN>
+# url to your find-parking node.js server
+REACT_APP_API_URL=http://localhost:8882/findAvailableParkings
+```
 
 ### `npm start`
 
@@ -27,6 +34,8 @@ The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+## Deployment
 
 ### `npm run deploy -- <s3_bucket_name>`
 

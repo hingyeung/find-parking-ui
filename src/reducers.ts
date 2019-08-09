@@ -8,7 +8,8 @@ import {
   updateAvailableParkings,
   updateCurrentLocation,
   updateMapLocation,
-  updateMapViewState
+  updateMapViewState,
+  isFetchingParkingData
 } from './actions';
 import { ApplicationState } from './types';
 import { getType } from "typesafe-actions";
@@ -31,7 +32,8 @@ const initialState: ApplicationState = {
   inAccessibleParkingMode: false,
   showLoadingZonesOnly: false,
   showDisclaimerPopup: true,
-  showAboutPopup: false
+  showAboutPopup: false,
+  isLoading: false
 };
 
 function findParkingApp(state: ApplicationState = initialState, action: any) {
@@ -71,6 +73,8 @@ function findParkingApp(state: ApplicationState = initialState, action: any) {
       return Object.assign({}, state, {errorMessage: action.payload});
     case getType(clearErrorMessage):
       return Object.assign({}, state, {errorMessage: undefined});
+    case getType(isFetchingParkingData):
+      return Object.assign({}, state, {isLoading: action.payload});
     default:
       console.log('Unknown action', action.type);
       return state;

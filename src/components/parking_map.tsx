@@ -2,6 +2,7 @@ import React from 'react';
 import { StaticMap, ViewState, ViewStateChangeInfo } from 'react-map-gl';
 import DeckGL, { IconLayer, MapView, ScatterplotLayer } from 'deck.gl';
 import LocateMeButton from './locate_me_button';
+import QueryProgressBar from './progress_bar';
 import LoadingZoneIcon from '@material-ui/icons/LocalShipping';
 import AccessibleIcon from '@material-ui/icons/Accessible';
 import ContactIcon from '@material-ui/icons/ContactSupport';
@@ -252,7 +253,7 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
           <StyledToolbar>
             <StyledTitleWrapper>
               <Typography component="h1" variant="h5" color="inherit">
-                Melbourne CBD Parking Finder
+                Melbourne CBD On-street Parking Finder
               </Typography>
               <Typography component="h2" variant="subtitle2" color="inherit">
                 <Hidden xsDown>Find available parking spaces in Melbourne CBD</Hidden>
@@ -268,6 +269,7 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
               <ContactIcon/>
             </AboutIconButton>
           </StyledToolbar>
+          <QueryProgressBar/>
         </AppBar>
         <AboutPopup/>
         <FPSnackbar open={props.errorMessage !== undefined} onClose={props.clearErrorMessage} message={props.errorMessage}/>

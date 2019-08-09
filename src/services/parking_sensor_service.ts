@@ -62,7 +62,7 @@ function findAvailableParkings(centreLocation: Coordinate) {
         resolve(convertAPIParkingSpace(response.data));
       })
       .catch((err: AxiosError) => {
-        console.warn(`ERROR(${err.code}): ${err.message}`);
+        console.warn(`ERROR(${err.code}): ${err.message}`, err.stack);
         reject(err);
       })
   });

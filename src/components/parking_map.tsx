@@ -1,11 +1,7 @@
 import React from 'react';
 import { StaticMap, ViewState, ViewStateChangeInfo } from 'react-map-gl';
-import DeckGL, { IconLayer, MapView, ScatterplotLayer } from 'deck.gl';
+import DeckGL, { IconLayer } from 'deck.gl';
 import LocateMeButton from './locate_me_button';
-import QueryProgressBar from './progress_bar';
-import LoadingZoneIcon from '@material-ui/icons/LocalShipping';
-import AccessibleIcon from '@material-ui/icons/Accessible';
-import ContactIcon from '@material-ui/icons/ContactSupport';
 import FPSnackbar from './fp_snackbar';
 import {
   ApplicationState,
@@ -22,16 +18,12 @@ import {
   clearErrorMessage,
   clickParkingSpace,
   hoverOnParkingIcon,
-  openAboutPopup,
-  resetClickedMapObject,
-  toggleAccessibleMode,
-  toggleShowLoadingZonesOnly,
   updateMapViewState
 } from "../actions";
+import ParkingMapAppBar from './parking_map_app_bar';
 import ParkingInfoPanel from "./parking_info_panel";
 import styled from 'styled-components';
 import ParkingIconAtlas from '../assets/parking_icon_sprites.png';
-import { AppBar, Hidden, IconButton, Toolbar, Typography } from '@material-ui/core';
 import DisclaimerPopup from './disclaimer_popup';
 import AboutPopup from './about_popup';
 import {
@@ -58,9 +50,6 @@ type IParkingMapProps = {
   hoveringOnParkingIcon: boolean;
   inAccessibleParkingMode: boolean;
   showLoadingZonesOnly: boolean;
-  toggleShowLoadingZonesOnly: () => void;
-  toggleAccessibleMode: () => void;
-  showAboutPopup: () => void;
   clearErrorMessage: () => void;
 }
 
@@ -188,42 +177,6 @@ const StyledLocateMeButtonContainer = styled('div')`
   right: 25px;
 `;
 
-type ToggleIconButtonProps = {
-  selected: boolean;
-};
-
-const ToggleIconButton = styled(IconButton)`
-// https://medium.com/sipios/use-styled-components-with-material-ui-react-e0759f9a15ce
-  && {
-    ${(props: ToggleIconButtonProps) => {
-    if (props.selected) {
-      return `
-        color: white;
-        `
-      } else {
-        return `
-          color: rgba(255, 255, 255, 0.2);
-        `
-      }
-    }}
-  }
-`;
-
-const AboutIconButton = styled(IconButton)`
-  && {
-    color: #EEE;
-  }
-`;
-
-const StyledTitleWrapper = styled('div')`
-  flex-grow: 1;
-`;
-
-const StyledToolbar = styled(Toolbar)`
-  padding-top: 10px;
-  padding-bottom: 10px;
-`;
-
 const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
     return (
       <div>
@@ -249,28 +202,7 @@ const ParkingMap: React.FunctionComponent<IParkingMapProps> = (props) => {
           <LocateMeButton />
         </StyledLocateMeButtonContainer>
         <ParkingInfoPanel inAccessibleParkingMode={props.inAccessibleParkingMode}/>
-        <AppBar position="fixed" color="primary">
-          <StyledToolbar>
-            <StyledTitleWrapper>
-              <Typography component="h1" variant="h5" color="inherit">
-                Melbourne CBD On-street Parking Finder
-              </Typography>
-              <Typography component="h2" variant="subtitle2" color="inherit">
-                <Hidden xsDown>Find available parking spaces in Melbourne CBD</Hidden>
-              </Typography>
-            </StyledTitleWrapper>
-            <ToggleIconButton selected={props.inAccessibleParkingMode} onClick={props.toggleAccessibleMode}>
-              <AccessibleIcon/>
-            </ToggleIconButton>
-            <ToggleIconButton selected={props.showLoadingZonesOnly} onClick={props.toggleShowLoadingZonesOnly}>
-              <LoadingZoneIcon/>
-            </ToggleIconButton>
-            <AboutIconButton onClick={props.showAboutPopup}>
-              <ContactIcon/>
-            </AboutIconButton>
-          </StyledToolbar>
-          <QueryProgressBar/>
-        </AppBar>
+        <ParkingMapAppBar/>
         <AboutPopup/>
         <FPSnackbar open={props.errorMessage !== undefined} onClose={props.clearErrorMessage} message={props.errorMessage}/>
       </div>
@@ -309,16 +241,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     },
     hoverOnParkingIcon: (isHovering: boolean) => {
       dispatch(hoverOnParkingIcon(isHovering));
-    },
-    toggleShowLoadingZonesOnly: () => {
-      dispatch(toggleShowLoadingZonesOnly());
-    },
-    showAboutPopup: () => {
-      dispatch(openAboutPopup());
-    },
-    toggleAccessibleMode: () => {
-      dispatch(toggleAccessibleMode());
-      dispatch(resetClickedMapObject());
     },
     clearErrorMessage: () => {
       dispatch(clearErrorMessage());

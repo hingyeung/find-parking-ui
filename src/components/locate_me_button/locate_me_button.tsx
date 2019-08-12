@@ -14,7 +14,8 @@ type LocateMeButtonProps = {
   mapViewState: ViewState;
 }
 
-const LocateMeButton: React.FunctionComponent<LocateMeButtonProps & React.HTMLProps<HTMLButtonElement>> = (props) => {
+// exporting the undecorated component to make testing easier
+export const LocateMeButton: React.FunctionComponent<LocateMeButtonProps & React.HTMLProps<HTMLButtonElement>> = (props) => {
   return (
     <Fab color="primary" aria-label="Locate me" onClick={(e) => props.fetchCurrentLocation(props.mapViewState)}>
       <MyLocationIcon/>

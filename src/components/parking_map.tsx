@@ -1,7 +1,7 @@
 import React from 'react';
 import { StaticMap, ViewState, ViewStateChangeInfo } from 'react-map-gl';
 import DeckGL, { IconLayer } from 'deck.gl';
-import LocateMeButton from './locate_me_button';
+import LocateMeButton from './locate_me_button/locate_me_button';
 import FPSnackbar from './fp_snackbar';
 import {
   ApplicationState,

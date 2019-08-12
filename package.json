@@ -19,7 +19,7 @@
     "react-dom": "^16.7.0",
     "react-map-gl": "^4.0.7",
     "react-redux": "^6.0.0",
-    "react-scripts": "^2.1.8",
+    "react-scripts": "3.0.0",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.2.0",
     "typesafe-actions": "^3.0.0",
@@ -44,6 +44,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@types/react-redux": "^7.0.0"
+    "@types/react-redux": "^7.0.0",
+    "react-test-renderer": "^16.9.0"
   }
 }

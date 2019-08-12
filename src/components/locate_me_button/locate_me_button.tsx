@@ -1,7 +1,7 @@
 import React from 'react';
-import { ApplicationState } from '../types';
+import { ApplicationState } from '../../types';
 import { connect } from "react-redux";
-import { fetchCurrentLocationAndAvailableParkingsWithThunk } from '../actions';
+import { fetchCurrentLocationAndAvailableParkingsWithThunk } from '../../actions';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import Fab from '@material-ui/core/Fab';

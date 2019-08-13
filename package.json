@@ -29,6 +29,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "//": "https://create-react-app.dev/docs/debugging-tests",
+    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
     "eject": "react-scripts eject",
     "deploy": "./scripts/deploy.sh",
     "init_infrastructure": "./scripts/init_infrastructure.sh",

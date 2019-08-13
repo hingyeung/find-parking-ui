@@ -18,7 +18,7 @@ const IconLink: React.FunctionComponent<{iconSrc: string;} & React.HTMLProps<HTM
   const {className, href, alt, target} = props;
   return (
     <a {...{className, href, target}}>
-      <SocialIcon alt={props.alt} src={props.iconSrc}/>
+      <SocialIcon alt={alt} src={props.iconSrc}/>
     </a>
   )
 };

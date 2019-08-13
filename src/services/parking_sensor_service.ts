@@ -1,8 +1,7 @@
 import { APIResponseParkingRestriction, APIResponseParkingSpace, Coordinate, ParkingSpace } from "../types";
 import { AxiosError, AxiosResponse } from "axios";
 import parseParkingRestrictionDescription from '../helper/parse_parking_restriction_description';
-
-const axios = require('axios');
+import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL;
 const HHMMSS_PATTERN = /(\d{2}):(\d{2}):\d{2}/;
@@ -23,7 +22,10 @@ const convertAPIParkingSpace = (apiResponseParkingSpaces: APIResponseParkingSpac
 
 const getCurrentParkingRestriction = (parkingRestrictions: APIResponseParkingRestriction[]) => {
   let remainingRestrictions = parkingRestrictions ? parkingRestrictions.slice(0) : [];
-  const now = new Date();
+  // Using new Date(Date.now()) to get current to make mocking current time easier.
+  // We just have to mock Date.now(), not the entire Date class.
+  // https://codewithhugo.com/mocking-the-current-date-in-jest-tests/#on-using-date-now-vs-new-date
+  const now = new Date(Date.now());
   const startTime = new Date(now);
   const endTime = new Date(now);
 
@@ -52,19 +54,19 @@ const getCurrentParkingRestriction = (parkingRestrictions: APIResponseParkingRes
     undefined;
 };
 
-function findAvailableParkings(centreLocation: Coordinate) {
+const findAvailableParkings = (centreLocation: Coordinate): Promise<ParkingSpace[]>  => {
   const requestUrl = `${API_URL}?lat=${centreLocation.latitude}&lng=${centreLocation.longitude}&radiusInMeter=500`;
   return new Promise((resolve, reject) => {
     axios.get(requestUrl, {
       timeout: 10000
     })
-      .then((response: AxiosResponse) => {
+    .then((response: AxiosResponse) => {
         resolve(convertAPIParkingSpace(response.data));
-      })
-      .catch((err: AxiosError) => {
-        console.warn(`ERROR(${err.code}): ${err.message}`, err.stack);
-        reject(err);
-      })
+    })
+    .catch((err: AxiosError) => {
+      console.warn(`ERROR(${err.code}): ${err.message}`, err.stack);
+      reject(err);
+    })
   });
 }
 

@@ -6,33 +6,36 @@
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
     "@types/jest": "23.3.12",
-    "@types/node": "10.12.18",
     "@types/react": "16.7.18",
     "@types/react-dom": "16.0.11",
     "@types/react-map-gl": "^4.0.1",
     "@types/styled-components": "^4.1.12",
     "axios": "^0.18.1",
     "deck.gl": "^6.3.4",
-    "dotenv": "^6.2.0",
     "jss": "^9.8.7",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-map-gl": "^4.0.7",
     "react-redux": "^6.0.0",
-    "react-scripts": "^2.1.8",
+    "react-scripts": "3.0.0",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.2.0",
-    "typesafe-actions": "^3.0.0",
-    "typescript": "3.2.2"
+    "typesafe-actions": "^3.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "./scripts/deploy.sh",
     "init_infrastructure": "./scripts/init_infrastructure.sh",
-    "start_stubby": "npx stubby -w -d test/stubby/stubby.yaml"
+    "start_stubby": "npx stubby -w -d test/stubby/stubby.yaml",
+    "build-infra": "tsc --project src/infrastructure/",
+    "watch-infra": "tsc -w --outDir build-infra src/infrastructure/*",
+    "test-infra": "jest",
+    "synth:ui": "CDK_STACK_NAME_SUFFIX=$npm_config_stack_name_suffix CDK_STACK_ENV=$npm_config_env AWS_PROFILE=samuelli-$npm_config_env cdk synth --app='npx ts-node --project src/infrastructure/tsconfig.json src/infrastructure/main.ts'",
+    "deploy:ui": "npm run build-infra && CDK_STACK_NAME_SUFFIX=$npm_config_stack_name_suffix CDK_STACK_ENV=$npm_config_env AWS_PROFILE=samuelli-$npm_config_env cdk deploy --app='npx ts-node --project src/infrastructure/tsconfig.json src/infrastructure/main.ts'",
+    "destroy:ui": "npm run build-infra && CDK_STACK_NAME_SUFFIX=$npm_config_stack_name_suffix CDK_STACK_ENV=$npm_config_env AWS_PROFILE=samuelli-$npm_config_env cdk destroy --app='npx ts-node --project src/infrastructure/tsconfig.json src/infrastructure/main.ts'",
+    "diff:ui": "npm run build-infra && CDK_STACK_NAME_SUFFIX=$npm_config_stack_name_suffix CDK_STACK_ENV=$npm_config_env AWS_PROFILE=samuelli-$npm_config_env cdk diff --app='npx ts-node --project src/infrastructure/tsconfig.json src/infrastructure/main.ts'"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -44,6 +47,19 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@types/react-redux": "^7.0.0"
+    "@aws-cdk/assert": "^1.19.0",
+    "@aws-cdk/aws-certificatemanager": "^1.19.0",
+    "@aws-cdk/aws-route53": "^1.19.0",
+    "@aws-cdk/aws-route53-targets": "^1.19.0",
+    "@aws-cdk/aws-s3": "^1.19.0",
+    "@aws-cdk/aws-s3-deployment": "^1.19.0",
+    "@aws-cdk/core": "^1.19.0",
+    "@mobileposse/auto-delete-bucket": "^1.9.0",
+    "@types/node": "^12.12.21",
+    "@types/react-redux": "^7.0.0",
+    "aws-cdk": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "source-map-support": "^0.5.16",
+    "typescript": "^3.7.3"
   }
 }

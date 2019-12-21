@@ -41,20 +41,20 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ## Deployment
 
-### `npm run deploy -- <s3_bucket_name>`
+### Create configuration for the target environment
+`> cp .env-infra-template .env.infra-test`
+```
+CDK_AWS_REGION=ap-southeast-2
+CDK_AWS_ACCOUNT=
+CDK_AWS_ROUTE53_HOSTED_ZONE_NAME=zone.example.com
+CDK_AWS_BUCKET_NAME=app.zone.example.com
+CDK_DOMAIN_NAME=app.zone.example.com
+```
 
-Deploys artefacts from `dist` directory to the nominated S3 bucket. This command is useful if you host this web app using [S3 static website hosting](https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html). This command is usually used after `npm run build` to ensure production version of the app is deployed.
+### Deploy to AWS
+Deploys artefacts from `build` directory to the S3 bucket ${CDK_AWS_BUCKET_NAME}, creating SSL certificate for ${CDK_DOMAIN_NAME}, creating CloudFront distribution and Route 56 record for ${CDK_DOMAIN_NAME}. This command is usually used after `npm run build` to ensure production version of the app is deployed.  
 
-### `npm init_infrastructure -- <HOSTED_ZONE> <FQDN> <ACM_CERT_ARN>`
-
-  e.g. `npm run init_infrastructure -- example.com app.example.com arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012`
-
-Performs the initial infrastructure setup in AWS. This is the high level outlines of what it does:
-1. creates a S3 bucket using `FQDN` as bucket name and enabled static website hosting.
-1. deploys a CloudFront distribution with the provided certificate hosted in ACM (`ACM_CERT_ARN`) and points the CloudFront distribute the S3 bucket created in the previous step.
-1. in Route53, setup a DNS A record alias in `HOSTED_ZONE` hosted zone and points it to the CloudFront distribution created in the previous step.
-
-See [find-parking-ui-cf.yaml](scripts/find-parking-ui-cf.yaml) for more details.
+`> npm run deploy:ui  --stack-name-suffix=test --env=${aws_environment}`  
 
 ### Others
 The image sprites used in this web app was created using [TexturePacker](https://www.codeandweb.com/texturepacker).

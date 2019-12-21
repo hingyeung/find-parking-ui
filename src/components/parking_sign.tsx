@@ -51,7 +51,7 @@ const ParkingSign: React.FunctionComponent<ParkingSignProps> = (props) => {
     );
   }
 
-  if ((props.minutes % 60) == 0) {
+  if ((props.minutes % 60) === 0) {
     return (
       <ParkingSignWrapper className={props.className}>
         <HourParkingSign primaryColour={getPrimaryColourForParkingSignType(props.signType)} hours={props.minutes / 60} />

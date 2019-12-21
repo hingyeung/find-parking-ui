@@ -10,6 +10,7 @@
 
 # production
 /build
+/build-infra
 
 # misc
 .DS_Store
@@ -88,3 +89,11 @@ fabric.properties
 
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
+
+# CDK asset staging directory
+.cdk.*
+cdk.context.json
+cdk.out
+/build-infra
+.env
+.env.infra*

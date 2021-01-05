@@ -10,7 +10,7 @@
     "@types/react-dom": "16.0.11",
     "@types/react-map-gl": "^4.0.1",
     "@types/styled-components": "^4.1.12",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "deck.gl": "^6.3.4",
     "jss": "^9.8.7",
     "react": "^16.7.0",

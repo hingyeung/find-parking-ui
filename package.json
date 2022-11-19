@@ -17,7 +17,7 @@
     "react-dom": "^16.7.0",
     "react-map-gl": "^4.0.7",
     "react-redux": "^6.0.0",
-    "react-scripts": "3.0.0",
+    "react-scripts": "5.0.1",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.2.0",
     "typesafe-actions": "^3.0.0"
